@@ -1,0 +1,35 @@
+BOOTSTRAP ref=7ae0a85216217cce5451e15ec7105473e8e2d573 sha=7ae0a85216217cce5451e15ec7105473e8e2d573
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading scikit-learn (8.7MiB)
+Downloading scipy (33.7MiB)
+Downloading numpy (15.9MiB)
+Downloading sympy (6.0MiB)
+Downloading networkx (2.0MiB)
+Downloading pillow (6.6MiB)
+Downloading hf-xet (4.2MiB)
+Downloading timm (2.5MiB)
+Downloading torchvision (1.8MiB)
+Downloading torch (182.9MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded timm
+ Downloaded networkx
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 539ms
+PROVENANCE {"git_sha": "7ae0a85216217cce5451e15ec7105473e8e2d573", "stage": "collapse", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+
+--- machinery verification ---
+linear   {"fd_max_abs_err": 4.703780848982694e-12, "H_scale": 0.0021443825276772333, "M_fro": 3.7689174493675577e-16, "H_eff_fro": 0.11137160172084436, "identity_G_plus_M_err": 0.0, "asymmetry": 4.639406940619593e-16, "M_over_Heff": 3.3840919867655683e-15}
+swish    {"fd_max_abs_err": 5.432593068975533e-12, "H_scale": 0.0022898200536144828, "M_fro": 0.06311897665137406, "H_eff_fro": 0.1283109630313815, "identity_G_plus_M_err": 0.0, "asymmetry": 5.069874688641166e-16, "M_over_Heff": 0.4919219305986879}
+machinery_ok = True
+CONFIG {"activation": "swish", "init": "collapsed", "epochs": 15, "batch_size": 256, "seed": 0, "lr": 0.05, "momentum": 0.9, "hess_batches": 5, "hess_samples": 8, "use_bn": false, "eig_tol": 1e-10, "objective": "simsiam_negative_cosine", "dataset": "cifar10", "backbone": "resnet18_cifar", "head": "512-2048-2048 / 2048-512-2048, bias-free"}
+DATA fetched cifar-10-python.tar.gz (170,498,071 B) in 2106.0s
+SAMPLE0_COS {"H_eff_lambda_min": -0.002216977088039045, "H_eff_lambda_max": 0.0021531668110725015, "H_eff_n_neg": 316, "H_eff_fro": 0.0033944285290006425, "G_lambda_min": -0.002216225969511685, "G_lambda_max": 0.002145198560202841, "G_n_neg": 511, "G_fro": 0.003236038873556486, "M_lambda_min": -0.00011232355974372807, "M_lambda_max": 0.00012884810256581474, "M_n_neg": 241, "M_fro": 0.0010781856919122215, "H_eff_tan_lambda_min": -0.0001929225948676915, "H_eff_tan_lambda_max": 0.00010411042737398697, "H_eff_tan_n_neg": 317, "H_eff_tan_fro": 0.0014133436729076721, "G_tan_lambda_min": -0.0001672765578095908, "G_tan_lambda_max": -1.0969565937567041e-21, "G_tan_n_neg": 511, "G_tan_fro": 0.00098612405515034, "H_L_lambda_min": -8408.70448684231, "H_L_lambda_max": 8323.00969943634, "H_L_n_neg": 2047, "H_L_fro": 12450.0522174151, "H_L_tan_lambda_min": -85.69478738379784, "H_L_tan_lambda_max": -2.1316282072803006e-14, "H_L_tan_n_neg": 2047, "H_L_tan_fro": 3877.1564591838805, "M_over_Heff_fro": 0.317633935344531, "H_L_is_psd": false, "H_L_tan_is_psd": false}
+SAMPLE0_MSE {"H_eff_lambda_min": -3.3817122599089447e-08, "H_eff_lambda_max": 1.9561071608293566e-06, "H_eff_n_neg": 57, "H_eff_fro": 1.1646604856143841e-05, "G_lambda_min": 1.7836793522687173e-12, "G_lambda_max": 1.9530311558077342e-06, "G_n_neg": 0, "G_fro": 1.1556471900970912e-05, "M_lambda_min": -9.621868038344027e-08, "M_lambda_max": 1.0622805288992826e-07, "M_n_neg": 242, "M_fro": 8.91445590912883e-07, "H_eff_tan_lambda_min": -3.393160853615894e-08, "H_eff_tan_lambda_max": 1.9554012622878426e-06, "H_eff_tan_n_neg": 57, "H_eff_tan_fro": 1.159782750176067e-05, "G_tan_lambda_min": 4.982195097854974e-23, "G_tan_lambda_max": 1.9520038839750958e-06, "G_tan_n_neg": 0, "G_tan_fro": 1.1507398352408958e-05, "H_L_lambda_min": 1.0, "H_L_lambda_max": 1.0, "H_L_n_neg": 0, "H_L_fro": 45.254833995939045, "H_L_tan_lambda_min": -2.7755575615628914e-16, "H_L_tan_lambda_max": 1.000000000000014, "H_L_tan_n_neg": 0, "H_L_tan_fro": 45.243784103453926, "M_over_Heff_fro": 0.07654124115343587, "H_L_is_psd": true, "H_L_tan_is_psd": true}

@@ -41,6 +41,25 @@ from repro.models import ProjectionHead, ResNetBackbone
 EIG_TOL = 1e-10
 
 
+def _scale(summ, name):
+    """Largest-magnitude eigenvalue of one matrix — the round-off floor's reference."""
+    return max(abs(summ[f"{name}_lambda_min"]), abs(summ[f"{name}_lambda_max"]))
+
+
+def _frac_neg(lambda_min, scale, tol=EIG_TOL):
+    """Fraction of samples whose lambda_min is negative *beyond float64 round-off*.
+
+    A bare `lambda_min < 0` test is meaningless here: for a piecewise-linear head the
+    interaction term vanishes and lambda_min is a round-off residue that lands on
+    either side of zero at random.  ReLU produced lambda_min = -1.1e-16 against a
+    spectral scale of 2.0e-6, i.e. 1e-10 of the scale; calling that negative would
+    report noise as the paper's mechanism.  Same relative rule as `summarise`.
+    """
+    lambda_min = np.asarray(lambda_min, dtype=float)
+    scale = np.maximum(np.asarray(scale, dtype=float), 1e-30)
+    return float(np.mean(lambda_min < -tol * scale))
+
+
 class TwoCropTransform:
     def __init__(self, base):
         self.base = base
@@ -156,6 +175,7 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
         ep_exact, ep_power, ep_M, ep_G, ep_HL = [], [], [], [], []
         ep_exact_tan, ep_exact_mse, ep_Mrel, ep_Mrel_mse, ep_HLtan = [], [], [], [], []
         ep_var, ep_cond = [], []
+        sc_exact, sc_tan, sc_mse = [], [], []
         for i, ((x1, x2), _) in enumerate(loader):
             if max_steps_per_epoch is not None and i >= max_steps_per_epoch:
                 break
@@ -182,6 +202,9 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
                     ep_exact.append(cos_summ["H_eff_lambda_min"])
                     ep_exact_tan.append(cos_summ["H_eff_tan_lambda_min"])
                     ep_exact_mse.append(mse_summ["H_eff_lambda_min"])
+                    sc_exact.append(_scale(cos_summ, "H_eff"))
+                    sc_tan.append(_scale(cos_summ, "H_eff_tan"))
+                    sc_mse.append(_scale(mse_summ, "H_eff"))
                     ep_G.append(cos_summ["G_lambda_min"])
                     ep_M.append(cos_summ["M_lambda_min"])
                     ep_Mrel.append(cos_summ["M_over_Heff_fro"])
@@ -211,15 +234,21 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
             # (a) ambient cosine objective — what Figure 3 actually optimises
             "exact_lambda_min_mean": float(np.mean(ep_exact)),
             "exact_lambda_min_min": float(np.min(ep_exact)),
-            "exact_frac_neg": float(np.mean(np.array(ep_exact) < 0.0)),
+            "exact_frac_neg": _frac_neg(ep_exact, sc_exact),
+            "exact_frac_neg_raw_sign": float(np.mean(np.array(ep_exact) < 0.0)),
+            "exact_scale_mean": float(np.mean(sc_exact)),
             # (b) same objective restricted to the sphere's tangent space
             "tan_lambda_min_mean": float(np.mean(ep_exact_tan)),
             "tan_lambda_min_min": float(np.min(ep_exact_tan)),
-            "tan_frac_neg": float(np.mean(np.array(ep_exact_tan) < 0.0)),
+            "tan_frac_neg": _frac_neg(ep_exact_tan, sc_tan),
+            "tan_frac_neg_raw_sign": float(np.mean(np.array(ep_exact_tan) < 0.0)),
+            "tan_scale_mean": float(np.mean(sc_tan)),
             # (c) the paper's stated PSD premise: standard MSE objective
             "mse_lambda_min_mean": float(np.mean(ep_exact_mse)),
             "mse_lambda_min_min": float(np.min(ep_exact_mse)),
-            "mse_frac_neg": float(np.mean(np.array(ep_exact_mse) < 0.0)),
+            "mse_frac_neg": _frac_neg(ep_exact_mse, sc_mse),
+            "mse_frac_neg_raw_sign": float(np.mean(np.array(ep_exact_mse) < 0.0)),
+            "mse_scale_mean": float(np.mean(sc_mse)),
             "M_over_Heff_cos_mean": float(np.mean(ep_Mrel)),
             "M_over_Heff_mse_mean": float(np.mean(ep_Mrel_mse)),
             "power_lambda_min_mean": float(np.mean(ep_power)),
@@ -232,4 +261,12 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
             "elapsed_s": round(time.perf_counter() - t0, 1),
         }
         print("EPOCH " + json.dumps(rec), flush=True)
+        # Raw per-sample spectra, so any reader can recompute every fraction above at
+        # a tolerance of their own choosing instead of trusting EIG_TOL.
+        print("SAMPLES " + json.dumps({
+            "epoch": epoch, "activation": activation, "init": init,
+            "exact_lambda_min": ep_exact, "exact_scale": sc_exact,
+            "tan_lambda_min": ep_exact_tan, "tan_scale": sc_tan,
+            "mse_lambda_min": ep_exact_mse, "mse_scale": sc_mse,
+        }), flush=True)
     print(f"DONE {activation}/{init} in {time.perf_counter() - t0:.1f}s", flush=True)

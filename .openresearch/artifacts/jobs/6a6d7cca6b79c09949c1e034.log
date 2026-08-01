@@ -1,0 +1,37 @@
+BOOTSTRAP ref=b2e5cee769d836f0e5e98e11289a5b965afcbe25 sha=b2e5cee769d836f0e5e98e11289a5b965afcbe25
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading hf-xet (4.2MiB)
+Downloading networkx (2.0MiB)
+Downloading sympy (6.0MiB)
+Downloading scikit-learn (8.7MiB)
+Downloading numpy (15.9MiB)
+Downloading torchvision (1.8MiB)
+Downloading timm (2.5MiB)
+Downloading scipy (33.7MiB)
+Downloading pillow (6.6MiB)
+Downloading torch (182.9MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded timm
+ Downloaded networkx
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 684ms
+PROVENANCE {"git_sha": "b2e5cee769d836f0e5e98e11289a5b965afcbe25", "stage": "orbits", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+CONFIG {"epochs": 50, "batch_size": 512, "lr": 0.001, "temperature": 0.1, "seed": 0, "num_classes": 5, "images_per_class": 3, "num_rotations": 12, "optimiser": "adam", "head": "512-2048-2048 relu + BN", "backbone": "resnet18_cifar", "augmentations": "RRC(32), HFlip, Rot(45), ColorJitter(.4,.4,.4,.1) p=.8"}
+DATA fetched cifar-10-python.tar.gz (170,498,071 B) in 2104.5s
+--- geometry at initialisation (untrained: no learned metric yet) ---
+TABLE1 {"tag": "epoch0_trained_head", "mean_orbit_spread_backbone": 0.006541947233091431, "mean_orbit_spread_head": 0.006345150771251726, "orbit_compression_ratio": 1.0310152538425628, "D_intra_backbone": 0.11390564096815732, "D_intra_head": 0.11222319681581681, "D_intra_reduction": 1.0149919464074952, "D_inter_backbone": 0.05009648178535048, "D_inter_head": 0.049327327616560154, "D_inter_reduction": 1.0155928611168488, "class_orbit_ratio_backbone": 0.4398068555652578, "class_orbit_ratio_head": 0.4395466268664334, "class_orbit_separation": 0.9994083114086753, "per_orbit_backbone": [0.013966155961529919, 0.006970585241008429, 0.0096042321742368, 0.0025746044148528386, 0.0026358895641329662, 0.007981036773124528, 0.0047976212600716744, 0.0015626421264482576, 0.0027789450851920254, 0.009321238349915743, 0.00959280042494963, 0.004683809734206384, 0.006118165203940711, 0.008151678635162678, 0.007389803547598888], "per_orbit_head": [0.013307196283609162, 0.0067997026570979805, 0.00935045492366863, 0.0025446605112078367, 0.002661600681459719, 0.007598876791845752, 0.004677512712514249, 0.001497947653746502, 0.0027509065815936613, 0.009291874150761615, 0.009188621874404806, 0.004594877162479312, 0.005817931514664588, 0.007915964122350768, 0.007179133947371307]}
+CONTROL {"tag": "epoch0_control_random_head", "mean_orbit_spread_control_head": 0.006506046222935675, "control_compression_ratio": 1.0055180994609592}
+CURVATURE {"tag": "epoch0", "curvature_backbone_mean": 0.07460324962933858, "curvature_backbone_std": 0.013589194840385562, "curvature_head_mean": 0.07425041273236274, "curvature_head_std": 0.013609859292602125, "curvature_ratio": 0.9952704889032464}
+/repo/repro/orbits.py:236: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)
+  losses.append(float(loss))
+EPOCH {"epoch": 1, "nt_xent": 4.05460141368748, "elapsed_s": 4426.1}
+EPOCH {"epoch": 2, "nt_xent": 2.9448127844898973, "elapsed_s": 6684.6}

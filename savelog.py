@@ -17,8 +17,8 @@ api, tok = HfApi(), get_token()
 job_id, outdir = sys.argv[1], sys.argv[2]
 os.makedirs(outdir, exist_ok=True)
 
-info = api.inspect_job(job_id=job_id, token=tok)
-lines = list(api.fetch_job_logs(job_id=job_id, token=tok))
+info = api.inspect_job(job_id=job_id, namespace="DineshAI", token=tok)
+lines = list(api.fetch_job_logs(job_id=job_id, namespace="DineshAI", token=tok))
 
 # drop tqdm/progress carriage-return spam so the durable log stays readable
 keep = [ln for ln in lines if not re.search(r"\|[\s▏▎▍▌▋▊▉█]*\|", ln)]

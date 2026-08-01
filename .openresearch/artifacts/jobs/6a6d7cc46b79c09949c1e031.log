@@ -1,0 +1,36 @@
+BOOTSTRAP ref=baeb36dfa7887d091a5b88eb9adbfc9e458c6838 sha=baeb36dfa7887d091a5b88eb9adbfc9e458c6838
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading torchvision (1.8MiB)
+Downloading hf-xet (4.2MiB)
+Downloading scikit-learn (8.7MiB)
+Downloading pillow (6.6MiB)
+Downloading torch (182.9MiB)
+Downloading sympy (6.0MiB)
+Downloading networkx (2.0MiB)
+Downloading timm (2.5MiB)
+Downloading scipy (33.7MiB)
+Downloading numpy (15.9MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded networkx
+ Downloaded timm
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 574ms
+PROVENANCE {"git_sha": "baeb36dfa7887d091a5b88eb9adbfc9e458c6838", "stage": "collapse", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+
+--- machinery verification ---
+linear   {"fd_max_abs_err": 4.703780848982694e-12, "H_scale": 0.0021443825276772333, "M_fro": 3.7689174493675577e-16, "H_eff_fro": 0.11137160172084436, "identity_G_plus_M_err": 0.0, "asymmetry": 4.639406940619593e-16, "M_over_Heff": 3.3840919867655683e-15}
+linear   {"fd_max_abs_err": 4.703780848982694e-12, "H_scale": 0.0021443825276772333, "M_fro": 3.7689174493675577e-16, "H_eff_fro": 0.11137160172084436, "identity_G_plus_M_err": 0.0, "asymmetry": 4.639406940619593e-16, "M_over_Heff": 3.3840919867655683e-15}
+machinery_ok = False
+CONFIG {"activation": "linear", "init": "collapsed", "epochs": 15, "batch_size": 256, "seed": 0, "lr": 0.05, "momentum": 0.9, "hess_batches": 5, "hess_samples": 8, "use_bn": false, "eig_tol": 1e-10, "objective": "simsiam_negative_cosine", "dataset": "cifar10", "backbone": "resnet18_cifar", "head": "512-2048-2048 / 2048-512-2048, bias-free"}
+DATA fetched cifar-10-python.tar.gz (170,498,071 B) in 2104.9s
+SAMPLE0_COS {"H_eff_lambda_min": -0.002221556937837733, "H_eff_lambda_max": 0.002162982965919039, "H_eff_n_neg": 511, "H_eff_fro": 0.0031935603939597956, "G_lambda_min": -0.0022215569378377324, "G_lambda_max": 0.002162982965919041, "G_n_neg": 511, "G_fro": 0.003193560393959796, "M_lambda_min": -2.4312722361956074e-18, "M_lambda_max": 2.1156004079280084e-18, "M_n_neg": 254, "M_fro": 1.0912125876200921e-17, "H_eff_tan_lambda_min": -0.000131087681520615, "H_eff_tan_lambda_max": -1.9885809651485427e-21, "H_eff_tan_n_neg": 511, "H_eff_tan_fro": 0.0007704473142221886, "G_tan_lambda_min": -0.00013108768152061495, "G_tan_lambda_max": 1.4519733951892068e-21, "G_tan_n_neg": 511, "G_tan_fro": 0.0007704473142221886, "H_L_lambda_min": -524.0724752649375, "H_L_lambda_max": 519.8841978953477, "H_L_n_neg": 2047, "H_L_fro": 762.1166511060791, "H_L_tan_lambda_min": -4.188277369319473, "H_L_tan_lambda_max": 6.217248937900877e-15, "H_L_tan_n_neg": 2047, "H_L_tan_fro": 189.49351706286984, "M_over_Heff_fro": 3.4169154580072415e-15, "H_L_is_psd": false, "H_L_tan_is_psd": false}
+SAMPLE0_MSE {"H_eff_lambda_min": 2.2379729046776944e-11, "H_eff_lambda_max": 3.131739920172795e-05, "H_eff_n_neg": 0, "H_eff_fro": 0.0001847394783995539, "G_lambda_min": 2.237972904660091e-11, "G_lambda_max": 3.131739920172789e-05, "G_n_neg": 0, "G_fro": 0.0001847394783995539, "M_lambda_min": -4.1159224446041264e-20, "M_lambda_max": 3.95431177489573e-20, "M_n_neg": 255, "M_fro": 5.213495035183063e-19, "H_eff_tan_lambda_min": -1.4357593615562644e-21, "H_eff_tan_lambda_max": 3.1298710653902286e-05, "H_eff_tan_n_neg": 0, "H_eff_tan_fro": 0.00018395326915690541, "G_tan_lambda_min": 3.0544936551932326e-22, "G_tan_lambda_max": 3.129871065390231e-05, "G_tan_n_neg": 0, "G_tan_fro": 0.00018395326915690547, "H_L_lambda_min": 1.0, "H_L_lambda_max": 1.0, "H_L_n_neg": 0, "H_L_fro": 45.254833995939045, "H_L_tan_lambda_min": 2.220446049250313e-16, "H_L_tan_lambda_max": 1.000000000000012, "H_L_tan_n_neg": 0, "H_L_tan_fro": 45.24378410345474, "M_over_Heff_fro": 2.822079547018821e-15, "H_L_is_psd": true, "H_L_tan_is_psd": true}
+EPOCH {"epoch": 0, "activation": "linear", "init": "collapsed", "exact_lambda_min_mean": -0.00035220955375330756, "exact_lambda_min_min": -0.002279020433799542, "exact_frac_neg": 1.0, "tan_lambda_min_mean": -6.837743479374271e-06, "tan_lambda_min_min": -0.000131087681520615, "tan_frac_neg": 0.675, "mse_lambda_min_mean": 8.776874090636226e-12, "mse_lambda_min_min": 8.094382595190147e-13, "mse_frac_neg": 0.0, "M_over_Heff_cos_mean": 3.589444336556421e-15, "M_over_Heff_mse_mean": 2.015171759333599e-15, "power_lambda_min_mean": -1.805425983114617e-06, "G_lambda_min_min": -0.002279020433799542, "M_lambda_min_min": -2.6277371840788294e-18, "H_L_lambda_min_min": -561.7433490250055, "H_L_tan_lambda_min_min": -4.188277369319473, "variance": 0.014554555169664897, "cond_number": 283107.14735576924, "elapsed_s": 5588.9}

@@ -1,0 +1,36 @@
+BOOTSTRAP ref=e4a770eed98252c31fb44735148d8bf5cc50eaec sha=e4a770eed98252c31fb44735148d8bf5cc50eaec
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading scikit-learn (8.7MiB)
+Downloading pillow (6.6MiB)
+Downloading networkx (2.0MiB)
+Downloading numpy (15.9MiB)
+Downloading scipy (33.7MiB)
+Downloading hf-xet (4.2MiB)
+Downloading sympy (6.0MiB)
+Downloading timm (2.5MiB)
+Downloading torchvision (1.8MiB)
+Downloading torch (182.9MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded timm
+ Downloaded networkx
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 528ms
+PROVENANCE {"git_sha": "e4a770eed98252c31fb44735148d8bf5cc50eaec", "stage": "collapse", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+
+--- machinery verification ---
+linear   {"fd_max_abs_err": 4.703780848982694e-12, "H_scale": 0.0021443825276772333, "M_fro": 3.7689174493675577e-16, "H_eff_fro": 0.11137160172084436, "identity_G_plus_M_err": 0.0, "asymmetry": 4.639406940619593e-16, "M_over_Heff": 3.3840919867655683e-15}
+gelu     {"fd_max_abs_err": 3.3471454774502973e-12, "H_scale": 0.002375911775958718, "M_fro": 0.10043037866462286, "H_eff_fro": 0.1504619539513749, "identity_G_plus_M_err": 0.0, "asymmetry": 5.316278901641129e-16, "M_over_Heff": 0.6674802235858186}
+machinery_ok = True
+CONFIG {"activation": "gelu", "init": "collapsed", "epochs": 15, "batch_size": 256, "seed": 0, "lr": 0.05, "momentum": 0.9, "hess_batches": 5, "hess_samples": 8, "use_bn": false, "eig_tol": 1e-10, "objective": "simsiam_negative_cosine", "dataset": "cifar10", "backbone": "resnet18_cifar", "head": "512-2048-2048 / 2048-512-2048, bias-free"}
+DATA fetched cifar-10-python.tar.gz (170,498,071 B) in 2104.6s
+SAMPLE0_COS {"H_eff_lambda_min": -0.002216356457912673, "H_eff_lambda_max": 0.0021497204696253186, "H_eff_n_neg": 300, "H_eff_fro": 0.003665609966107987, "G_lambda_min": -0.0022156751571791302, "G_lambda_max": 0.0021364585954417653, "G_n_neg": 511, "G_fro": 0.0032723943306671804, "M_lambda_min": -0.00017873056889106324, "M_lambda_max": 0.00020529019570609476, "M_n_neg": 241, "M_fro": 0.0017179889839968377, "H_eff_tan_lambda_min": -0.0002508067160008692, "H_eff_tan_lambda_max": 0.00017455330428212975, "H_eff_tan_n_neg": 300, "H_eff_tan_fro": 0.0019882330954329006, "G_tan_lambda_min": -0.00018950409750990505, "G_tan_lambda_max": -1.3109197854683375e-20, "G_tan_n_neg": 511, "G_tan_fro": 0.0011193611342929653, "H_L_lambda_min": -8411.233384377141, "H_L_lambda_max": 8314.170753880673, "H_L_n_neg": 2047, "H_L_fro": 12615.465268231766, "H_L_tan_lambda_min": -97.06263047139123, "H_L_tan_lambda_max": -1.2789769243681803e-13, "H_L_tan_n_neg": 2047, "H_L_tan_fro": 4391.480697560934, "M_over_Heff_fro": 0.46867751885259545, "H_L_is_psd": false, "H_L_tan_is_psd": false}
+SAMPLE0_MSE {"H_eff_lambda_min": -6.321831297031859e-08, "H_eff_lambda_max": 1.9612727676963494e-06, "H_eff_n_neg": 72, "H_eff_fro": 1.176501257565536e-05, "G_lambda_min": 1.5786174858598947e-12, "G_lambda_max": 1.953312605050935e-06, "G_n_neg": 0, "G_fro": 1.1581687304212607e-05, "M_lambda_min": -1.5309794277245142e-07, "M_lambda_max": 1.7006634686207505e-07, "M_n_neg": 241, "M_fro": 1.4242558965393274e-06, "H_eff_tan_lambda_min": -6.383398736190898e-08, "H_eff_tan_lambda_max": 1.960822817001467e-06, "H_eff_tan_n_neg": 73, "H_eff_tan_fro": 1.1716167993085742e-05, "G_tan_lambda_min": 2.24987674377625e-23, "G_tan_lambda_max": 1.9523898805293946e-06, "G_tan_n_neg": 0, "G_tan_fro": 1.1532359352479182e-05, "H_L_lambda_min": 1.0, "H_L_lambda_max": 1.0, "H_L_n_neg": 0, "H_L_fro": 45.254833995939045, "H_L_tan_lambda_min": 3.1039519449402013e-16, "H_L_tan_lambda_max": 1.0000000000000144, "H_L_tan_n_neg": 0, "H_L_tan_fro": 45.243784103454665, "M_over_Heff_fro": 0.12105859533770964, "H_L_is_psd": true, "H_L_tan_is_psd": true}
+EPOCH {"epoch": 0, "activation": "gelu", "init": "collapsed", "exact_lambda_min_mean": -0.00034950478464443986, "exact_lambda_min_min": -0.0022777531547788815, "exact_frac_neg": 1.0, "tan_lambda_min_mean": -3.820652651650601e-05, "tan_lambda_min_min": -0.0002508067160008692, "tan_frac_neg": 1.0, "mse_lambda_min_mean": -0.00012633757259365567, "mse_lambda_min_min": -0.0004569283171090717, "mse_frac_neg": 1.0, "M_over_Heff_cos_mean": 0.8904562855872298, "M_over_Heff_mse_mean": 0.2142030800640792, "power_lambda_min_mean": -1.7988175240235548e-06, "G_lambda_min_min": -0.002269288812553276, "M_lambda_min_min": -0.00018789684245696056, "H_L_lambda_min_min": -8994.962822170031, "H_L_tan_lambda_min_min": -97.06263047139123, "variance": 0.015561867806200797, "cond_number": 475683.4815705128, "elapsed_s": 5199.1}
