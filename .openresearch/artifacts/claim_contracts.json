@@ -1,0 +1,89 @@
+{
+  "_note": "Pre-registered machine-checkable contracts. Written and committed BEFORE the long-running jobs reported results, so no threshold here was chosen after seeing an outcome. Any later change is recorded as a dated amendment in limitations.md, never by silent edit.",
+  "_registered_at": "2026-08-01, before jobs 6a6d7cbb / 6a6d7cbe / 6a6d7cc1 / 6a6d7cc4 / 6a6d7cc7 / 6a6d7cca / 6a6d7d64 reported any epoch",
+  "_paper_source_sha256": "c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4",
+
+  "claim_1_theorem_4_1": {
+    "statement": "Smooth nonlinear projection heads destabilize collapsed equilibria by injecting negative eigenvalues into the effective Hessian, while linear heads preserve collapse since the interaction term vanishes.",
+    "object_tested": "the exact float64 effective Hessian H_eff = d^2 L / dz^2 at real training states of a real ResNet-18/CIFAR-10 SimSiam-style run, decomposed into G = J^T (grad_h^2 L) J and M = sum_i [grad_h L]_i grad_z^2 h_i",
+    "predicates": {
+      "P1_linear_M_vanishes": "||M||_F / ||H_eff||_F < 1e-12 for the linear head at every tracked state",
+      "P2_relu_M_vanishes": "||M||_F / ||H_eff||_F < 1e-8 for the ReLU head at every tracked state (second derivative zero almost everywhere)",
+      "P3_smooth_M_material": "||M||_F / ||H_eff||_F > 1e-3 for GELU and Swish heads",
+      "P4_smooth_negative": "under the theorem's PSD premise (MSE objective), lambda_min(H_eff) < -1e-10 * |lambda_max| for GELU and Swish at a majority of tracked states",
+      "P5_linear_relu_nonneg": "under the same premise, lambda_min(H_eff) >= -1e-10 * |lambda_max| for linear and ReLU at every tracked state",
+      "P6_assumption_6": "||grad_h L|| bounded away from zero at the tracked states, otherwise the theorem is vacuous",
+      "P7_assumption_psd": "grad_h^2 L PSD is checked, not assumed; if it fails for the objective actually optimised that is reported as an assumption violation, not as a refutation of the theorem"
+    },
+    "verdict_rule": "VERIFIED only if P1, P2, P3, P4, P5 all hold and P6 holds. If P4/P5 fail under a premise that itself holds, FALSIFIED. If the premise fails so that the theorem does not apply to the objective the paper's own experiment optimises, that is reported explicitly and the verdict is decided on the theorem's own hypothesis class.",
+    "negative_controls": ["linear head (M must vanish identically)", "ReLU head (M must vanish a.e.)", "finite-difference check of H_eff against the analytic gradient"]
+  },
+
+  "claim_2_theorem_3_1": {
+    "statement": "For any r-dimensional subspace S with r = rank(grad_h^2 L), there exists a linear head W (k >= r) making H_eff isometric to the identity on S, and isotropy holds only on that active subspace.",
+    "object_tested": "real loss Hessians grad_h^2 L of eight real SSL objectives at real head outputs of official pretrained SSL checkpoints",
+    "predicates": {
+      "P1_symbolic": "symbolic certificate: B^T W^T H_L W B - I_r reduces to the zero matrix identically in (Lam, U, B) with W = U Lam^{-1/2} B^T, for symbolic orthonormal U and B and symbolic positive Lam",
+      "P2_annihilates": "symbolically, W = (W B) B^T, i.e. W annihilates S-perp so H_eff has rank exactly r with range S",
+      "P3_instantiated": "worst isotropy error over >= 25 random r-dimensional subspaces < 1e-8 in Frobenius norm on every real loss Hessian tested",
+      "P4_off_subspace": "worst off-subspace leakage ||P_perp H_eff P_perp||_F < 1e-8 on every real loss Hessian tested",
+      "P5_rank": "numerical rank of H_eff equals r on every draw",
+      "P6_assumption": "r <= d is checked; if rank(grad_h^2 L) > d the hypothesis cannot be met and that is reported"
+    },
+    "verdict_rule": "VERIFIED only if P1 and P2 hold symbolically AND P3, P4, P5 hold on real loss Hessians. A numerical pass without the symbolic discharge is scoped corroboration only and cannot exceed BLOCKED."
+  },
+
+  "claim_3_proposition_3_3": {
+    "statement": "If the loss geometry has nonvanishing Riemann curvature, no global constant linear W makes H_eff(z) = W^T g_L(Wz) W everywhere nondegenerate and isotropic.",
+    "object_tested": "the Riemann curvature of g_L = grad^2 L for real SSL objectives on a real slice of head-output space, plus the non-existence argument",
+    "predicates": {
+      "P1_curvature_nonzero": "||R|| > 0 by a clear margin for at least one real SSL objective, computed via autograd Christoffel symbols",
+      "P2_two_routes_agree": "the Christoffel-symbol route and the Hessian-metric cubic-form route agree to relative difference < 1e-6",
+      "P3_flat_control": "for a genuinely quadratic loss the same code returns ||R|| at round-off (< 1e-10 relative) and a single constant W isotropises every point",
+      "P4_metric_varies": "||g_L(u_1) - g_L(u_2)||_F is bounded away from zero across real points, so the constancy a global W would force is false",
+      "P5_obstruction": "a W fitted at one point leaves isotropy error bounded away from zero at other real points, while pointwise maps whiten each point to < 1e-10",
+      "P6_argument": "the non-existence step is a stated proof, not a search: isotropy forces rank(W) = d, hence g_L constant on range(W), hence vanishing Christoffels and vanishing Riemann tensor, contradicting the hypothesis"
+    },
+    "verdict_rule": "VERIFIED only if P1, P2, P3, P4, P5 hold and P6 is written out and checkable. A finite search over W alone cannot exceed BLOCKED."
+  },
+
+  "claim_4_figure_3": {
+    "statement": "Figure 3 tracks the Hessian spectrum during training: smooth-activation heads inject negative eigenvalues enabling escape from collapse, whereas ReLU-based heads do not and rely on discrete dynamics and BatchNorm.",
+    "object_tested": "lambda_min trajectories during real training, both recomputed from the authors' released 100-epoch arrays and independently regenerated by our own runs with exact float64 Hessians",
+    "predicates": {
+      "P1_spearman": "the paper's three stated Spearman correlations between representation variance and condition number reproduce to 3 decimal places (0.339 / 0.609 / 0.669) from the raw released arrays using an independent rank-correlation implementation",
+      "P2_frequency": "negative-eigenvalue epoch frequency far higher for Swish than for ReLU on the released arrays, with the counting threshold stated explicitly",
+      "P3_resolution": "the magnitude of the released lambda_min values is compared against the resolution of the 20-step float32 power iteration that produced them; if the sign structure is not resolvable at that scale it is reported",
+      "P4_independent": "our own runs, using exact float64 Hessians rather than power iteration, reproduce the qualitative sign structure across linear / ReLU / GELU / Swish",
+      "P5_estimator_gap": "the paper's own estimator is run alongside the exact computation on identical states and the discrepancy is quantified"
+    },
+    "verdict_rule": "VERIFIED only if P1 holds AND P4 holds. P3 and P5 are reported regardless of outcome; a finding that the released estimator cannot resolve its own reported signal is a limitation of the released evidence and must be stated."
+  },
+
+  "claim_5_section_6": {
+    "statement": "The geometric analysis is applied across both contrastive methods (InfoNCE, SimCLR, MoCo, DINO) and non-contrastive/decorrelation-based methods (BYOL, SimSiam, VICReg, Barlow Twins).",
+    "object_tested": "eight real loss implementations, their real Hessians at real head outputs, plus four official pretrained SSL checkpoints that ship their projection heads",
+    "predicates": {
+      "P1_all_eight": "all eight named objectives implemented as real losses and their exact Hessians computed at real head outputs of a real trained SSL model",
+      "P2_whitening_holds": "Theorem 3.1's construction succeeds (isotropy error < 1e-8) for every one of the eight",
+      "P3_families_covered": "at least two contrastive and two non-contrastive/decorrelation objectives among those that pass",
+      "P4_real_checkpoints": "orbit geometry measured on >= 3 official checkpoints spanning self-distillation (DINO), variance-invariance-covariance (VICReg) and redundancy reduction (Barlow Twins), on real CIFAR-10 images at 224px, four orbits, 12 steps, 50 trajectories",
+      "P5_no_toy": "no result in this claim uses a hand-constructed matrix or a synthetic representation"
+    },
+    "verdict_rule": "VERIFIED only if P1, P2, P3, P5 hold and P4 holds for at least three checkpoints. If checkpoints cannot be obtained, P4 is reported as unmet and the claim cannot exceed its algebraic scope."
+  },
+
+  "claim_6_figure_5": {
+    "statement": "Figure 5 shows PCA visualization demonstrating 21.85x compression of augmentation orbits under the learned projection head geometry.",
+    "object_tested": "mean orbit spread of backbone (512-d) vs head (2048-d) L2-normalised representations over 15 rotation orbits of a real CIFAR-10 / ResNet-18 SimCLR model",
+    "predicates": {
+      "P1_exact_ratio": "recomputed compression ratio rounds to 21.85x at two decimal places",
+      "P2_two_formulas": "centroid-distance and summed-coordinate-variance formulas agree to < 1e-12 absolute",
+      "P3_uncertainty": "a bootstrap 95% interval over the 15 orbits is reported and contains the stated value",
+      "P4_control": "a randomly initialised head of the same architecture and the same 2048-d output produces a compression ratio near 1x, refuting the dimensionality explanation the paper itself rules out",
+      "P5_pca": "the PCA projection underlying Figure 5 is reproduced and its in-plane orbit spread reported for both backbone and head",
+      "P6_independent_training": "an independently trained SimCLR ResNet-18 on CIFAR-10, same protocol, produces compression well above 1x with the same untrained-head control near 1x; the exact value is not expected to equal 21.85x across checkpoints and any difference is reported honestly"
+    },
+    "verdict_rule": "VERIFIED only if P1, P2, P3, P4, P5 hold. P6 is independent corroboration; if the independent run fails to show compression, that is a material conflict and the verdict is reconsidered."
+  }
+}

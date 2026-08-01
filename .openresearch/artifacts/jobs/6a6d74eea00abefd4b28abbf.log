@@ -1,0 +1,651 @@
+Downloading networkx (2.0MiB)
+Downloading numpy (15.9MiB)
+Downloading torchvision (1.8MiB)
+Downloading pillow (6.6MiB)
+Downloading torch (182.9MiB)
+Downloading sympy (6.0MiB)
+ Downloaded torchvision
+ Downloaded pillow
+ Downloaded networkx
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded torch
+Installed 13 packages in 525ms
+
+==============================================================================
+STAGE0.1  ENVIRONMENT
+==============================================================================
+{
+  "cgroup_cpu_quota": 8,
+  "os_cpu_count": 64,
+  "sched_affinity": 64,
+  "torch": "2.13.0+cpu",
+  "torchvision": "0.28.0+cpu",
+  "numpy": "2.5.1",
+  "python": "3.12.12",
+  "machine": "x86_64",
+  "cuda_available": false,
+  "mem_total_gb": 493.3,
+  "cpu_model": "AMD EPYC 7R13 Processor"
+}
+
+==============================================================================
+STAGE0.2  THROUGHPUT CALIBRATION (ResNet-18 @ 32x32, SimSiam-style step)
+==============================================================================
+trainable parameters: 18,515,520
+batch   64:   1.824 s/step  ->      70.2 img/s (23.8 min per CIFAR-10 epoch, 2 views)
+batch  256:   8.931 s/step  ->      57.3 img/s (29.1 min per CIFAR-10 epoch, 2 views)
+20 HVP power iterations (batch 256): 0.786 s
+{
+  "64": {
+    "sec_per_step": 1.8243,
+    "images_per_s": 70.2
+  },
+  "256": {
+    "sec_per_step": 8.9312,
+    "images_per_s": 57.3
+  },
+  "hvp_20iter_sec": 0.786
+}
+
+==============================================================================
+STAGE0.3  AUTHORS' RELEASED RAW ARTIFACTS
+==============================================================================
+authors repo HEAD = 117231d60fee34d4906d1f16c5007e13a96a4d94
+
+--- authors/results/cifar10/resnet18/collapse_results.npy  (207,670 bytes)
+    dict with keys: ['linear_bn_False_lr_base', 'swish_bn_False_lr_base', 'swish_bn_True_lr_base', 'swish_bn_False_lr_large', 'swish_bn_False_lr_small', 'swish_bn_True_lr_large', 'swish_bn_True_lr_small', 'gelu_bn_False_lr_base', 'relu_bn_False_lr_base', 'relu_bn_True_lr_base', 'relu_bn_False_lr_large', 'relu_bn_False_lr_small', 'relu_bn_True_lr_large', 'relu_bn_True_lr_small']
+      linear_bn_False_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_False_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_True_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_False_lr_large: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_False_lr_small: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_True_lr_large: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_True_lr_small: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      gelu_bn_False_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_base: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_large: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_small: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_large: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_small: dict(['mean', 'std', 'raw', 'proj_update_norms_mean', 'proj_update_norms_std', 'proj_update_norms_raw', 'proj_update_norms_unnormalized_mean', 'proj_update_norms_unnormalized_std', 'proj_update_norms_unnormalized_raw', 'proj_update_rel_mean', 'proj_update_rel_std', 'proj_update_rel_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_norms_unnormalized_mean: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_std: ndarray shape=(50,) dtype=float64
+        proj_update_norms_unnormalized_raw: ndarray shape=(3, 50) dtype=float64
+        proj_update_rel_mean: ndarray shape=(50,) dtype=float64
+        proj_update_rel_std: ndarray shape=(50,) dtype=float64
+        proj_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_norms_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_std: ndarray shape=(50,) dtype=float64
+        backbone_update_norms_raw: ndarray shape=(3, 50) dtype=float64
+        backbone_update_rel_mean: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_std: ndarray shape=(50,) dtype=float64
+        backbone_update_rel_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+
+--- authors/results/cifar10/resnet18/curvature_results.npy  (740 bytes)
+    dict with keys: ['curvatures_z_per_seed', 'curvatures_h_per_seed', 'ratios_per_seed', 'mean_curv_z', 'std_curv_z', 'mean_curv_h', 'std_curv_h', 'mean_ratio', 'std_ratio', 'num_seeds', 'dataset']
+      curvatures_z_per_seed: list(len=3) head=[np.float32(0.12411675), np.float32(0.12867828), np.float32(0.1233479)]
+      curvatures_h_per_seed: list(len=3) head=[np.float32(0.24022205), np.float32(0.24845453), np.float32(0.23833904)]
+      ratios_per_seed: list(len=3) head=[np.float32(1.9354522), np.float32(1.9308193), np.float32(1.9322504)]
+      mean_curv_z: float32 = 0.12538098
+      std_curv_z: float32 = 0.0023525774
+      mean_curv_h: float32 = 0.24233854
+      std_curv_h: float32 = 0.0043924497
+      mean_ratio: float32 = 1.9328407
+      std_ratio: float32 = 0.0019368958
+      num_seeds: int = 3
+      dataset: str = cifar10
+
+--- authors/results/cifar10/resnet18/guillotine_results.npy  (451 bytes)
+    dict with keys: ['backbone_acc_linear', 'head_acc_linear', 'backbone_acc_mlp', 'head_acc_mlp', 'gap_backbone', 'gap_head', 'dataset']
+      backbone_acc_linear: float = 0.5227
+      head_acc_linear: float = 0.3755
+      backbone_acc_mlp: float = 0.5546
+      head_acc_mlp: float = 0.4356
+      gap_backbone: float = 0.03189999999999993
+      gap_head: float = 0.06009999999999999
+      dataset: str = cifar10
+
+--- authors/results/cifar10/resnet18/orbit_visualization.npy  (1,848,320 bytes)
+    dict with keys: ['orbits_z', 'orbits_h', 'orbit_labels', 'orbit_ids', 'orbit_angles', 'selected_classes', 'class_names', 'num_rotations', 'num_classes', 'images_per_class', 'dataset']
+      orbits_z: ndarray shape=(180, 512) dtype=float32
+      orbits_h: ndarray shape=(180, 2048) dtype=float32
+      orbit_labels: ndarray shape=(180,) dtype=int64
+      orbit_ids: ndarray shape=(180,) dtype=int64
+      orbit_angles: ndarray shape=(180,) dtype=float64
+      selected_classes: list(len=5) head=[0, 2, 4, 6]
+      class_names: list(len=5) head=['airplane', 'bird', 'deer', 'frog']
+      num_rotations: int = 12
+      num_classes: int = 5
+      images_per_class: int = 3
+      dataset: str = cifar10
+
+--- authors/results/cifar10/resnet18/head_depth_ablations/geometric_ablation_depth_1.npz  (1,850,890 bytes)
+    [depth] shape=() dtype=int64
+    [acc_z_linear] shape=() dtype=float64
+    [acc_h_linear] shape=() dtype=float64
+    [curvatures_z] shape=(100,) dtype=float32
+    [curvatures_h] shape=(100,) dtype=float32
+    [orbits_z] shape=(180, 512) dtype=float32
+    [orbits_h] shape=(180, 2048) dtype=float32
+    [orbit_labels] shape=(180,) dtype=int64
+    [orbit_ids] shape=(180,) dtype=int64
+    [orbit_angles] shape=(180,) dtype=float64
+
+--- authors/results/cifar10/resnet18/head_depth_ablations/geometric_ablation_depth_2.npz  (1,850,890 bytes)
+    [depth] shape=() dtype=int64
+    [acc_z_linear] shape=() dtype=float64
+    [acc_h_linear] shape=() dtype=float64
+    [curvatures_z] shape=(100,) dtype=float32
+    [curvatures_h] shape=(100,) dtype=float32
+    [orbits_z] shape=(180, 512) dtype=float32
+    [orbits_h] shape=(180, 2048) dtype=float32
+    [orbit_labels] shape=(180,) dtype=int64
+    [orbit_ids] shape=(180,) dtype=int64
+    [orbit_angles] shape=(180,) dtype=float64
+
+--- authors/results/cifar10/resnet18/head_depth_ablations/geometric_ablation_depth_3.npz  (1,850,890 bytes)
+    [depth] shape=() dtype=int64
+    [acc_z_linear] shape=() dtype=float64
+    [acc_h_linear] shape=() dtype=float64
+    [curvatures_z] shape=(100,) dtype=float32
+    [curvatures_h] shape=(100,) dtype=float32
+    [orbits_z] shape=(180, 512) dtype=float32
+    [orbits_h] shape=(180, 2048) dtype=float32
+    [orbit_labels] shape=(180,) dtype=int64
+    [orbit_ids] shape=(180,) dtype=int64
+    [orbit_angles] shape=(180,) dtype=float64
+
+--- authors/results/cifar10/resnet18/hessian_tracker/raw_data_collapsed_relu.npz  (4,244 bytes)
+    [epochs] shape=(100,) dtype=int64
+    [min_eigenvalues] shape=(100,) dtype=float64
+    [variances] shape=(100,) dtype=float64
+    [condition_numbers] shape=(100,) dtype=float64
+
+--- authors/results/cifar10/resnet18/hessian_tracker/raw_data_collapsed_swish.npz  (4,244 bytes)
+    [epochs] shape=(100,) dtype=int64
+    [min_eigenvalues] shape=(100,) dtype=float64
+    [variances] shape=(100,) dtype=float64
+    [condition_numbers] shape=(100,) dtype=float64
+
+--- authors/results/cifar10/resnet18/hessian_tracker/raw_data_normal_swish.npz  (4,244 bytes)
+    [epochs] shape=(100,) dtype=int64
+    [min_eigenvalues] shape=(100,) dtype=float64
+    [variances] shape=(100,) dtype=float64
+    [condition_numbers] shape=(100,) dtype=float64
+
+--- authors/results/cifar10/vit_tiny/collapse_results.npy  (57,560 bytes)
+    dict with keys: ['linear_bn_False_lr_base', 'relu_bn_False_lr_base', 'gelu_bn_False_lr_base', 'swish_bn_False_lr_base', 'relu_bn_True_lr_base', 'relu_bn_False_lr_large', 'relu_bn_False_lr_small', 'relu_bn_True_lr_large', 'relu_bn_True_lr_small']
+      linear_bn_False_lr_base: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_base: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      gelu_bn_False_lr_base: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      swish_bn_False_lr_base: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_base: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_large: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_False_lr_small: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_large: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+      relu_bn_True_lr_small: dict(['mean', 'std', 'raw', 'grad_norms_mean', 'grad_norms_std', 'grad_norms_raw', 'cond_nums_mean', 'cond_nums_std', 'cond_nums_raw'])
+        mean: ndarray shape=(50,) dtype=float64
+        std: ndarray shape=(50,) dtype=float64
+        raw: ndarray shape=(3, 50) dtype=float64
+        grad_norms_mean: ndarray shape=(50,) dtype=float64
+        grad_norms_std: ndarray shape=(50,) dtype=float64
+        grad_norms_raw: ndarray shape=(3, 50) dtype=float64
+        cond_nums_mean: ndarray shape=(50,) dtype=float64
+        cond_nums_std: ndarray shape=(50,) dtype=float64
+        cond_nums_raw: ndarray shape=(3, 50) dtype=float64
+
+--- authors/results/cifar10/vit_tiny/curvature_results.npy  (740 bytes)
+    dict with keys: ['curvatures_z_per_seed', 'curvatures_h_per_seed', 'ratios_per_seed', 'mean_curv_z', 'std_curv_z', 'mean_curv_h', 'std_curv_h', 'mean_ratio', 'std_ratio', 'num_seeds', 'dataset']
+      curvatures_z_per_seed: list(len=3) head=[np.float32(0.122451894), np.float32(0.12279925), np.float32(0.122327715)]
+      curvatures_h_per_seed: list(len=3) head=[np.float32(0.31616744), np.float32(0.32036194), np.float32(0.31452525)]
+      ratios_per_seed: list(len=3) head=[np.float32(2.5819726), np.float32(2.6088264), np.float32(2.571169)]
+      mean_curv_z: float32 = 0.12252629
+      std_curv_z: float32 = 0.00019955996
+      mean_curv_h: float32 = 0.3170182
+      std_curv_h: float32 = 0.0024575877
+      mean_ratio: float32 = 2.5873225
+      std_ratio: float32 = 0.015832223
+      num_seeds: int = 3
+      dataset: str = cifar10
+
+--- authors/results/cifar10/vit_tiny/guillotine_results.npy  (451 bytes)
+    dict with keys: ['backbone_acc_linear', 'head_acc_linear', 'backbone_acc_mlp', 'head_acc_mlp', 'gap_backbone', 'gap_head', 'dataset']
+      backbone_acc_linear: float = 0.4075
+      head_acc_linear: float = 0.3492
+      backbone_acc_mlp: float = 0.4422
+      head_acc_mlp: float = 0.4087
+      gap_backbone: float = 0.03470000000000001
+      gap_head: float = 0.0595
+      dataset: str = cifar10
+
+--- authors/results/cifar10/vit_tiny/orbit_visualization.npy  (1,617,919 bytes)
+    dict with keys: ['orbits_z', 'orbits_h', 'orbit_labels', 'orbit_ids', 'orbit_angles', 'selected_classes', 'class_names', 'num_rotations', 'num_classes', 'images_per_class', 'dataset']
+      orbits_z: ndarray shape=(180, 192) dtype=float32
+      orbits_h: ndarray shape=(180, 2048) dtype=float32
+      orbit_labels: ndarray shape=(180,) dtype=int64
+      orbit_ids: ndarray shape=(180,) dtype=int64
+      orbit_angles: ndarray shape=(180,) dtype=float64
+      selected_classes: list(len=5) head=[0, 2, 4, 6]
+      class_names: list(len=5) head=['airplane', 'bird', 'deer', 'frog']
+      num_rotations: int = 12
+      num_classes: int = 5
+      images_per_class: int = 3
+      dataset: str = cifar10
+
+--- authors/results/cifar100/resnet18/collapse_results.npy  (3,977 bytes)
+    dict with keys: ['linear', 'relu', 'gelu', 'swish']
+      linear: dict(['mean', 'std', 'raw'])
+        mean: ndarray shape=(20,) dtype=float64
+        std: ndarray shape=(20,) dtype=float64
+        raw: ndarray shape=(3, 20) dtype=float64
+      relu: dict(['mean', 'std', 'raw'])
+        mean: ndarray shape=(20,) dtype=float64
+        std: ndarray shape=(20,) dtype=float64
+        raw: ndarray shape=(3, 20) dtype=float64
+      gelu: dict(['mean', 'std', 'raw'])
+        mean: ndarray shape=(20,) dtype=float64
+        std: ndarray shape=(20,) dtype=float64
+        raw: ndarray shape=(3, 20) dtype=float64
+      swish: dict(['mean', 'std', 'raw'])
+        mean: ndarray shape=(20,) dtype=float64
+        std: ndarray shape=(20,) dtype=float64
+        raw: ndarray shape=(3, 20) dtype=float64
+
+--- authors/results/cifar100/resnet18/curvature_results.npy  (741 bytes)
+    dict with keys: ['curvatures_z_per_seed', 'curvatures_h_per_seed', 'ratios_per_seed', 'mean_curv_z', 'std_curv_z', 'mean_curv_h', 'std_curv_h', 'mean_ratio', 'std_ratio', 'num_seeds', 'dataset']
+      curvatures_z_per_seed: list(len=3) head=[np.float32(0.1252242), np.float32(0.12843716), np.float32(0.12870285)]
+      curvatures_h_per_seed: list(len=3) head=[np.float32(0.23291343), np.float32(0.23592758), np.float32(0.23475581)]
+      ratios_per_seed: list(len=3) head=[np.float32(1.8599712), np.float32(1.8369104), np.float32(1.824014)]
+      mean_curv_z: float32 = 0.12745474
+      std_curv_z: float32 = 0.0015809516
+      mean_curv_h: float32 = 0.23453228
+      std_curv_h: float32 = 0.001240631
+      mean_ratio: float32 = 1.8402985
+      std_ratio: float32 = 0.014873688
+      num_seeds: int = 3
+      dataset: str = cifar100
+
+--- authors/results/cifar100/resnet18/guillotine_results.npy  (452 bytes)
+    dict with keys: ['backbone_acc_linear', 'head_acc_linear', 'backbone_acc_mlp', 'head_acc_mlp', 'gap_backbone', 'gap_head', 'dataset']
+      backbone_acc_linear: float = 0.4201
+      head_acc_linear: float = 0.3119
+      backbone_acc_mlp: float = 0.4453
+      head_acc_mlp: float = 0.3416
+      gap_backbone: float = 0.0252
+      gap_head: float = 0.029700000000000004
+      dataset: str = cifar100
+
+==============================================================================
+STAGE0.4  FIRST PASS — Figure 5 orbit compression, Figure 3 lambda_min
+==============================================================================
+orbits_z (180, 512)  orbits_h (180, 2048)  n_orbits=15
+mean orbit spread  backbone = 0.0224755748
+mean orbit spread  head     = 0.0010285150
+COMPRESSION RATIO           = 21.85245268x   (paper: 21.85x)
+per-orbit backbone: [0.012832, 0.033647, 0.012646, 0.016674, 0.020439, 0.016619, 0.010684, 0.020918, 0.027101, 0.020484, 0.017091, 0.014041, 0.032094, 0.052979, 0.028885]
+per-orbit head:     [0.00055262, 0.00160625, 0.00044976, 0.00072851, 0.00086962, 0.00064706, 0.00043483, 0.00088866, 0.00134261, 0.00085412, 0.00075734, 0.00064744, 0.0014887, 0.00282112, 0.00133907]
+
+raw_data_collapsed_relu.npz: epochs=100  neg_eig_epochs=1  min=-1.85563e-06  var[0]=0.0142391 var[-1]=0.0142439 ratio=1.000341
+
+raw_data_collapsed_swish.npz: epochs=100  neg_eig_epochs=72  min=-3.122e-07  var[0]=0.0154318 var[-1]=0.0158523 ratio=1.027248
+
+raw_data_normal_swish.npz: epochs=100  neg_eig_epochs=69  min=-6.34562e-06  var[0]=0.0138044 var[-1]=0.028848 ratio=2.089762
+
+==============================================================================
+STAGE0 COMPLETE in 48.0 s
+==============================================================================

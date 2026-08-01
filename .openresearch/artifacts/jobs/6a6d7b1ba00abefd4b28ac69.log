@@ -1,0 +1,54 @@
+BOOTSTRAP ref=83761893fc2b975d4fc104d5a5be2025a430a648 sha=83761893fc2b975d4fc104d5a5be2025a430a648
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading numpy (15.9MiB)
+Downloading networkx (2.0MiB)
+Downloading scipy (33.7MiB)
+Downloading timm (2.5MiB)
+Downloading pillow (6.6MiB)
+Downloading sympy (6.0MiB)
+Downloading hf-xet (4.2MiB)
+Downloading scikit-learn (8.7MiB)
+Downloading torch (182.9MiB)
+Downloading torchvision (1.8MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded timm
+ Downloaded networkx
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 523ms
+PROVENANCE {"git_sha": "83761893fc2b975d4fc104d5a5be2025a430a648", "stage": "released", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+AUTHORS_REPO https://github.com/farischaudhry/projection-head-geometry @ 117231d60fee34d4906d1f16c5007e13a96a4d94
+PINNED_AUTHORS_SHA 117231d60fee34d4906d1f16c5007e13a96a4d94
+
+=== CLAIM 6 :: CIFAR-10 / ResNet-18
+file authors/results/cifar10/resnet18/orbit_visualization.npy  sha256=3121c85537cf3792dcc238a039b1db8e9d02c544b6c66d8320722a79f622109d
+{"orbits_z_shape": [180, 512], "orbits_h_shape": [180, 2048], "n_orbits": 15, "rotations": 12, "classes": ["airplane", "bird", "deer", "frog", "truck"], "images_per_class": 3}
+CLAIM6 {"mean_orbit_spread_backbone": 0.022475574816245975, "mean_orbit_spread_head": 0.001028514974882734, "compression_ratio": 21.852452677034215, "compression_ratio_rounded_2dp": 21.85, "cross_formula_abs_err_backbone": 0.0, "cross_formula_abs_err_head": 0.0, "bootstrap_ci95": [20.723994123401216, 23.25808759262115], "control_random_head_spread": 0.023280402593217127, "control_random_head_ratio": 0.9654289579508543, "per_orbit_backbone": [0.012832371607111188, 0.03364703416295977, 0.012645796513022181, 0.016673665085176665, 0.02043903644209483, 0.01661923309756842, 0.010683632049387779, 0.02091826652814724, 0.027100524720569022, 0.020483597508774588, 0.01709098803414074, 0.014041481813786763, 0.03209418940086461, 0.0529791846190574, 0.02888462066102843], "per_orbit_head": [0.0005526200330883745, 0.0016062485611129903, 0.0004497631921884723, 0.0007285091991256318, 0.000869618747466763, 0.0006470630617960706, 0.0004348322156353945, 0.0008886638053907265, 0.0013426056015732933, 0.0008541235537704654, 0.0007573408870169325, 0.0006474418340998983, 0.001488702591946458, 0.0028211184722362823, 0.0013390728667932552]}
+PCA_backbone explained_var_pc1=0.172317 pc2=0.144722 orbit_spread_in_pc12=0.0003919469
+PCA_head explained_var_pc1=0.190690 pc2=0.166748 orbit_spread_in_pc12=0.0000415200
+
+=== CLAIM 6 :: CIFAR-10 / ViT-Tiny
+file authors/results/cifar10/vit_tiny/orbit_visualization.npy  sha256=1edd5ff06937a8165605ad0bb890668a17c9a2d6df59eb7ff1df282fa0521079
+{"orbits_z_shape": [180, 192], "orbits_h_shape": [180, 2048], "n_orbits": 15, "rotations": 12, "classes": ["airplane", "bird", "deer", "frog", "truck"], "images_per_class": 3}
+CLAIM6 {"mean_orbit_spread_backbone": 0.01089895945856908, "mean_orbit_spread_head": 2.714239199383461e-06, "compression_ratio": 4015.4749297868725, "compression_ratio_rounded_2dp": 4015.47, "cross_formula_abs_err_backbone": 1.734723475976807e-18, "cross_formula_abs_err_head": 4.235164736271502e-22, "bootstrap_ci95": [3687.7850766482247, 4425.531861208447], "control_random_head_spread": 0.010496475979179186, "control_random_head_ratio": 1.038344629205865, "per_orbit_backbone": [0.009576997984494719, 0.013515557115220405, 0.010319185523023569, 0.013241324164944446, 0.007459158494866329, 0.009040802985011418, 0.011388139799822753, 0.005424144875818546, 0.010901738667180522, 0.006863039325047739, 0.008257521714730561, 0.009065995414326773, 0.016139824930837775, 0.020443439676656835, 0.011847521206553795], "per_orbit_head": [2.3781023778334e-06, 3.5162268441072516e-06, 2.5486026468401344e-06, 3.650701444608981e-06, 1.9458469615736955e-06, 3.058271343847877e-06, 3.4660824750752777e-06, 1.3193547782149936e-06, 2.1632572381748587e-06, 1.5048032015595648e-06, 1.9037718216907133e-06, 2.660008884416658e-06, 2.6853782807735e-06, 4.98835409660151e-06, 2.9248255954335027e-06]}
+PCA_backbone explained_var_pc1=0.194108 pc2=0.153048 orbit_spread_in_pc12=0.0003533110
+PCA_head explained_var_pc1=0.237356 pc2=0.192225 orbit_spread_in_pc12=0.0000002676
+
+=== CLAIM 4 :: Figure 3 Hessian tracking (100 epochs, real training)
+CLAIM4 {"file": "raw_data_collapsed_relu.npz", "sha256": "a708ea30ebd03a3273b5bdcc78793301a77b1cb97b3383ac321e1195c54bc6b3", "epochs": 100, "n_neg_strict": 1, "n_neg_below_1e-7": 1, "n_neg_below_1e-6": 1, "lambda_min_min": -1.8556338520547832e-06, "lambda_min_mean": -1.8556338520547833e-08, "variance_first": 0.014239075163809152, "variance_last": 0.014243936772720936, "variance_ratio": 1.00034142729467, "variance_range": 1.5850145465288665e-05, "spearman_var_cond_drop0": 0.6693630179344465, "spearman_var_cond_all": 0.6705430543054307}
+CLAIM4 {"file": "raw_data_collapsed_swish.npz", "sha256": "0e4cecd4850af91ea94dac050ef6fe51cb54b0cd328731d88e9e99e0923c746c", "epochs": 100, "n_neg_strict": 72, "n_neg_below_1e-7": 1, "n_neg_below_1e-6": 0, "lambda_min_min": -3.121995411870145e-07, "lambda_min_mean": 1.1271255270444242e-08, "variance_first": 0.015431789385202604, "variance_last": 0.015852278203536303, "variance_ratio": 1.0272482216959817, "variance_range": 0.0028708175684397045, "spearman_var_cond_drop0": 0.6086332714904144, "spearman_var_cond_all": 0.6092409240924094}
+CLAIM4 {"file": "raw_data_normal_swish.npz", "sha256": "8d0a186663204f9ff43c36801896d4478e55544a6d01be61ef1b8d1239d2b556", "epochs": 100, "n_neg_strict": 69, "n_neg_below_1e-7": 32, "n_neg_below_1e-6": 5, "lambda_min_min": -6.345619013004012e-06, "lambda_min_mean": -2.2965526560048136e-07, "variance_first": 0.013804447502853015, "variance_last": 0.028848006442571298, "variance_ratio": 2.0897617551596452, "variance_range": 0.015131325566042693, "spearman_var_cond_drop0": 0.33873840445269016, "spearman_var_cond_all": 0.35837983798379847}
+
+=== CLAIM 1 :: Theorem 4.1 across activations (released collapse runs)
+CLAIM1 {"setting": "cifar100/resnet18", "activation": "linear", "seeds": 3, "epochs": 20, "var_first_per_seed": [0.00012017606004707145, 0.0001190438579027445, 0.00012710344355920038], "var_last_per_seed": [0.00021697947042562146, 8.467169593750816e-05, 8.804668300633904e-05], "ratio_last_over_first_per_seed": [1.8055132639615021, 0.7112647173000943, 0.6927167395376661], "ratio_mean": 1.0698315735997543, "max_over_first_mean": 1.2685044213205006}
+CLAIM1 {"setting": "cifar100/resnet18", "activation": "relu", "seeds": 3, "epochs": 20, "var_first_per_seed": [8.898222603017258e-05, 9.023823760386578e-05, 9.890812127439895e-05], "var_last_per_seed": [9.884262458540106e-06, 1.1105262264837366e-05, 1.4844123527546264e-05], "ratio_last_over_first_per_seed": [0.11108131252176695, 0.12306603674584199, 0.15007992605950415], "ratio_mean": 0.12807575844237104, "max_over_first_mean": 1.0}
+CLAIM1 {"setting": "cifar100/resnet18", "activation": "gelu", "seeds": 3, "epochs": 20, "var_first_per_seed": [0.00039795523427772463, 0.00033520982203496256, 0.0003619235193179248], "var_last_per_seed": [0.0023921846637751944, 0.0031639897941429284, 0.002613385366371919], "ratio_last_over_first_per_seed": [6.011190349379194, 9.438833787552092, 7.220822154075709], "ratio_mean": 7.5569487636689985, "max_over_first_mean": 13.800809154514708}
+CLAIM1 {"setting": "cifar100/resnet18", "activation": "swish", "seeds": 3, "epochs": 20, "var_first_per_seed": [0.0005108251274784201, 0.00036819556640393876, 0.00041194653157120784], "var_last_per_seed": [0.00021632089799860513, 0.0016732052467840234, 0.002379234018495556], "ratio_last_over_first_per_seed": [0.42347348703543103, 4.544338388225971, 5.775589393654814], "ratio_mean": 3.5811337563054053, "max_over_first_mean": 5.143332054025067}
+RUN_ALL COMPLETE stage=released in 6.7s
