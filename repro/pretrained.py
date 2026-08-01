@@ -368,10 +368,6 @@ def prop33(H1, H2, m=6, seed=SEED, tag=""):
 
 
 def main():
-    print("=== symbolic certificate for Theorem 3.1's universal quantifier ===", flush=True)
-    print("THM31_SYMBOLIC " + json.dumps(geometry.theorem_31_symbolic_certificate()),
-          flush=True)
-
     root = data.stage()
     testset = torchvision.datasets.CIFAR10(root=root, train=False, download=True,
                                            transform=T.Compose([T.Resize(224), T.ToTensor()]))
@@ -394,3 +390,11 @@ def main():
         loss_geometry(H1, H2, d=512, tag=name)
         prop33(H1, H2, m=6, tag=name)
         break
+
+    # Left until last: it is pure symbolic algebra with no dependency on anything
+    # above, so a slow computer-algebra step can never block the empirical results.
+    print("=== symbolic certificate for Theorem 3.1's universal quantifier ===", flush=True)
+    t0 = time.perf_counter()
+    print("THM31_SYMBOLIC " + json.dumps(geometry.theorem_31_symbolic_certificate()),
+          flush=True)
+    print(f"THM31_SYMBOLIC_SECONDS {time.perf_counter() - t0:.1f}", flush=True)

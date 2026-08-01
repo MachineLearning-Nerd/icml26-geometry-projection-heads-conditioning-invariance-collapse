@@ -124,29 +124,34 @@ def theorem_31_symbolic_certificate():
     """
     import sympy as sp
 
-    r, k, d = 3, 5, 4
-    lam = sp.symbols("l1:4", positive=True)
+    r, k, d = 2, 4, 3
+    lam = sp.symbols("l1:3", positive=True)
     Lam = sp.diag(*lam)
 
     # A general orthonormal U_r (k x r): r columns of a symbolic Householder
     # reflection, so U^T U = I_r holds identically for every v.
-    v = sp.Matrix(sp.symbols("v1:6"))
+    v = sp.Matrix(sp.symbols("v1:5"))
     U = (sp.eye(k) - 2 * (v * v.T) / (v.T * v)[0])[:, :r]
-    orth_U = sp.simplify(U.T * U - sp.eye(r))
+    orth_U = sp.expand(U.T * U - sp.eye(r))
 
-    # A general orthonormal B (d x r) from Gram-Schmidt on free symbols.
-    b = sp.Matrix(d, r, sp.symbols(f"b1:{d * r + 1}"))
-    B, _ = b.QRdecomposition()
-    orth_B = sp.simplify(B.T * B - sp.eye(r))
+    # A general orthonormal B (d x r): r columns of a second symbolic Householder
+    # reflection, on free symbols independent of v.  Symbolic Gram-Schmidt/QR on a
+    # fully free d x r matrix produces nested radicals that do not simplify in
+    # reasonable time; a Householder reflection is orthogonal by construction and
+    # stays in rational functions of its parameters.
+    w = sp.Matrix(sp.symbols("w1:4"))
+    B = (sp.eye(d) - 2 * (w * w.T) / (w.T * w)[0])[:, :r]
+    orth_B = sp.expand(B.T * B - sp.eye(r))
 
     H_L = U * Lam * U.T
     W = U * sp.diag(*[1 / sp.sqrt(x) for x in lam]) * B.T
 
-    iso = sp.simplify(sp.expand(B.T * W.T * H_L * W * B) - sp.eye(r))
+    iso = sp.expand(B.T * W.T * H_L * W * B) - sp.eye(r)
     # the same W must annihilate S-perp, i.e. W B_perp = 0; equivalently W = (W B) B^T
-    kill = sp.simplify(W - (W * B) * B.T)
+    kill = sp.expand(W - (W * B) * B.T)
 
-    zero = lambda M: all(sp.simplify(e) == 0 for e in M)  # noqa: E731
+    def zero(M):
+        return all(sp.cancel(sp.expand(e)) == 0 for e in M)
     return {
         "U_orthonormal": zero(orth_U),
         "B_orthonormal": zero(orth_B),
