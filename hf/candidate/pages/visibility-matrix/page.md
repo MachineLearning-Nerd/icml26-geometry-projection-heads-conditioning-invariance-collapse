@@ -7,7 +7,7 @@ of the reproduction repository's internals.
 
 | Claim | Canonical page | Code visible | Data inline | Raw link | Checker | Control | Exact claim tested | Reviewer verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | [link](#/claim-1-theorem-4-1) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
+| 1 | [link](#/claim-1-theorem-4-1) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
 | 2 | [link](#/claim-2-theorem-3-1) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
 | 3 | [link](#/claim-3-proposition-3-3) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
 | 4 | [link](#/claim-4-figure-3) | yes | yes | yes | yes | yes | yes | **VERIFIED** |

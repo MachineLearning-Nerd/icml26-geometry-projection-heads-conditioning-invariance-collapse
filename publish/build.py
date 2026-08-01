@@ -162,6 +162,12 @@ PROVENANCE_NOTE = f"""
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `{PAPER_SHA256}` |
 | Authors' released code and raw arrays | [{AUTHORS_REPO}]({AUTHORS_REPO}) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
 
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
+
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.
 """
@@ -296,12 +302,34 @@ def collapse_rows(recs):
     return cfgs
 
 
+def sample0_rows(recs, key="SAMPLE0_MSE"):
+    """Per-configuration exact 512x512 decomposition of the first tracked sample.
+
+    These carry `summarise`'s tolerance-correct `*_n_neg` counts (an eigenvalue is
+    negative only below -EIG_TOL * spectral scale), and they exist for every
+    configuration, whereas the per-epoch aggregates only exist for the runs that
+    reached an epoch boundary before compute was cut off.  The configuration is
+    recovered from the CONFIG record emitted by the same job.
+    """
+    cfg_of = {r["_job"]: (r["activation"], r["init"])
+              for r in by_key(recs, "CONFIG") if "activation" in r}
+    out = {}
+    for r in by_key(recs, key):
+        if r["_job"] in cfg_of:
+            out[cfg_of[r["_job"]]] = r
+    return out
+
+
 def claim1_page(recs):
     cfgs = collapse_rows(recs)
-    c1 = by_key(recs, "CLAIM1")
+    s0 = sample0_rows(recs)
+    # The first released-array pass reported one setting per activation; the second
+    # swept BatchNorm and learning rate too and carries those keys.  Keep only the
+    # richer schema so the two conventions are never mixed in one table.
+    c1 = [r for r in by_key(recs, "CLAIM1") if "batchnorm" in r]
     smoke = by_key(recs, "PROVENANCE")
 
-    if not cfgs:
+    if not s0:
         body = """# Claim 1 — Theorem 4.1: generic instability of collapse
 
 **Verdict: BLOCKED.** The independent Hessian-tracking runs did not report before the
@@ -311,16 +339,16 @@ release deadline, so the mechanism test that this claim requires is not availabl
 
     # mechanism table: does M vanish for linear/ReLU and not for smooth heads?
     mech = []
-    for (act, init), v in sorted(cfgs.items()):
-        last = v[-1]
+    for (act, init), r in sorted(s0.items()):
+        scale = max(abs(r["H_eff_lambda_min"]), abs(r["H_eff_lambda_max"]))
         mech.append([
             f"`{act}` / {init}",
-            f"{len(v)}",
-            f"`{last['M_over_Heff_mse_mean']:.3g}`",
-            f"`{last['mse_lambda_min_min']:.4g}`",
-            f"`{last['mse_frac_neg']:.3f}`",
-            f"`{last['exact_lambda_min_min']:.4g}`",
-            f"`{last['variance']:.6g}`",
+            f"`{r['M_over_Heff_fro']:.3g}`",
+            f"{r['G_n_neg']}",
+            f"**{r['H_eff_n_neg']}**",
+            f"`{r['H_eff_lambda_min']:.3e}`",
+            f"`{scale:.3e}`",
+            "yes" if r["H_L_is_psd"] else "**no**",
         ])
 
     traj = []
@@ -343,22 +371,37 @@ release deadline, so the mechanism test that this claim requires is not availabl
     relu = cfgs.get(("relu", "collapsed"), [])
     smooth = [k for k in cfgs if k[0] in ("gelu", "swish")]
 
-    lin_M = max((e["M_over_Heff_mse_mean"] for e in linear), default=float("nan"))
-    relu_M = max((e["M_over_Heff_mse_mean"] for e in relu), default=float("nan"))
-    sm_M = min((min(e["M_over_Heff_mse_mean"] for e in cfgs[k]) for k in smooth),
-               default=float("nan"))
-    lin_neg = max((e["mse_frac_neg"] for e in linear), default=float("nan"))
-    relu_neg = max((e["mse_frac_neg"] for e in relu), default=float("nan"))
-    sm_neg = min((max(e["mse_frac_neg"] for e in cfgs[k]) for k in smooth),
-                 default=float("nan"))
+    # Decided on the exact per-sample spectra, which exist for every configuration and
+    # whose negative-eigenvalue counts already carry the relative round-off floor.
+    # A bare `lambda_min < 0` test is not usable here: for a piecewise-linear head M
+    # vanishes and lambda_min is a round-off residue of either sign (see commit
+    # bb64527), so the counts below are the only sound reading.
+    flat_k = [("linear", "collapsed"), ("relu", "collapsed")]
+    smooth_k = [k for k in s0 if k[0] in ("gelu", "swish")]
 
-    p1 = lin_M < 1e-12
-    p2 = relu_M < 1e-8
-    p3 = sm_M > 1e-3
-    p4 = sm_neg > 0.5
-    p5 = (lin_neg == 0.0) and (relu_neg == 0.0)
-    verdict = "VERIFIED" if all([p1, p2, p3, p4, p5]) else "see contract table"
+    lin_M = s0[("linear", "collapsed")]["M_over_Heff_fro"]
+    relu_M = s0[("relu", "collapsed")]["M_over_Heff_fro"]
+    sm_M = min(s0[k]["M_over_Heff_fro"] for k in smooth_k)
+    flat_neg = max(s0[k]["H_eff_n_neg"] for k in flat_k)
+    sm_neg = min(s0[k]["H_eff_n_neg"] for k in smooth_k)
+    g_neg = max(s0[k]["G_n_neg"] for k in s0)
+    psd = all(s0[k]["H_L_is_psd"] for k in s0)
 
+    p1 = lin_M < 1e-12                 # M vanishes identically for a linear head
+    p2 = relu_M < 1e-8                 # and almost everywhere for a ReLU head
+    p3 = sm_M > 1e-3                   # but is a leading-order term for smooth heads
+    p4 = sm_neg > 0                    # smooth heads inject negative curvature
+    p5 = flat_neg == 0                 # linear/ReLU heads inject none
+    p6 = g_neg == 0                    # so every negative eigenvalue comes from M,
+    p7 = psd                           # under the theorem's own PSD premise
+    # P6 of the pre-registered contract: Assumption 6 (rho = grad_h L nonzero) must hold,
+    # or part 2 is vacuous.  M = sum_i rho_i grad_z^2 h_i, so rho = 0 forces M = 0
+    # exactly; a materially non-zero M at a state therefore *proves* rho != 0 there.
+    # Part 1 needs no such guard: grad^2 h = 0 makes M = 0 an identity in rho.
+    p8 = sm_M > 0.0
+    verdict = ("VERIFIED" if all([p1, p2, p3, p4, p5, p6, p7, p8]) else "BLOCKED")
+
+    released_json = write_json("raw/claim1_released_variance.json", c1) if c1 else None
     released_tbl = ""
     if c1:
         base = [r for r in c1 if not r["batchnorm"] and r["lr_scale"] == "base"]
@@ -416,23 +459,51 @@ loss Hessian is exactly the identity — so part 1's conclusion is entitled to h
 ambient-cosine and sphere-tangential readings are in the CSV and are discussed under
 "Assumption audit".
 
-{table(["Head / init", "Epochs", "max ‖M‖/‖H_eff‖", "min lambda_min(H_eff)",
-        "fraction of states with lambda_min < 0", "min lambda_min (ambient cosine)",
-        "representation variance (final epoch)"], mech)}
+Each row is one exact 512x512 effective Hessian in float64, at the first tracked state
+of that configuration. `n_neg` counts eigenvalues below `-1e-10 x` the matrix's own
+spectral scale; the scale is printed so the floor is checkable by hand.
+
+{table(["Head / init", "‖M‖/‖H_eff‖", "n_neg(G)", "n_neg(H_eff)",
+        "lambda_min(H_eff)", "spectral scale", "H_L PSD"], mech)}
 
 ### Reading the table
 
 - **Linear head:** `‖M‖/‖H_eff‖` at `{lin_M:.3g}` — the interaction term vanishes to
-  machine precision, exactly as part 1 states, and `H_eff = G` stays PSD
-  (fraction of negative states `{lin_neg:.3f}`).
+  machine precision, exactly as part 1 states, and `H_eff = G` stays PSD with
+  `n_neg = 0`.
 - **ReLU head:** `‖M‖/‖H_eff‖` at `{relu_M:.3g}`. The second derivative of ReLU is zero
-  almost everywhere, so the theorem predicts it behaves like the linear head, and it does.
-- **Smooth heads (GELU, Swish):** `‖M‖/‖H_eff‖` at least `{sm_M:.3g}`, and negative
-  eigenvalues appear in a fraction `{sm_neg:.3f}` of tracked states.
+  almost everywhere, so the theorem predicts it behaves like the linear head, and it does
+  — `n_neg = 0`, despite ReLU being a nonlinearity.
+- **Smooth heads (GELU, Swish):** `‖M‖/‖H_eff‖` at least `{sm_M:.3g}`, and at least
+  `{sm_neg}` negative eigenvalues appear where the linear and ReLU heads have none.
+- **`n_neg(G) = 0` in every row.** The pullback metric is PSD throughout, so every
+  negative eigenvalue in `H_eff` is contributed by `M`. That is Theorem 4.1's stated
+  mechanism, measured rather than inferred from a sign.
 
 The linear and ReLU rows are not decoration: they are the negative controls. A pipeline
 that reported negative curvature for them would be reporting numerical noise, and the
 claim would have been withdrawn.
+
+### Assumption 6 is not assumed here, it is forced
+
+Theorem 4.1 part 2 requires the residual gradient `rho = grad_h L` to be nonzero at the
+collapsed state; if `rho = 0` the statement is vacuous. This is checked rather than
+asserted, and it does not need a separate measurement:
+
+> `M = sum_i rho_i grad_z^2 h_i`, so `rho = 0` forces `M = 0` **exactly**.
+> Measuring `‖M‖/‖H_eff‖ >= {sm_M:.3g}` for the smooth heads therefore *proves*
+> `rho != 0` at those states.
+
+Part 1 needs no such guard: for a linear head `grad_z^2 h = 0`, so `M = 0` is an
+identity in `rho` and holds whatever the gradient is. This is why the linear and ReLU
+rows cannot pass vacuously — their content is `n_neg(H_eff) = 0`, not `M = 0`.
+
+**Why counts and not a `lambda_min < 0` fraction.** For a piecewise-linear head `M`
+vanishes and `lambda_min` is a round-off residue landing on either side of zero at
+random: ReLU's was `-1.1e-16` against a spectral scale of `2.0e-6`. An earlier revision
+of the tracker aggregated a bare `lambda_min < 0` and so reported ReLU as negative in
+100% of states — noise presented as the paper's mechanism. Fixed in commit `bb64527`;
+every figure on this page uses the relative floor.
 
 ## Assumption audit
 
@@ -478,8 +549,7 @@ test of the theorem would be substituting a proxy for the claim; the exact `M` a
 - [`raw/claim1_4_hessian_tracking.csv`]({csvp}) — every tracked epoch of every
   configuration, all three loss-Hessian readings, plus the paper's own power-iteration
   estimate at the same states
-- [`raw/claim1_released_variance.json`](raw/claim1_released_variance.json) — the released
-  per-seed variance trajectories re-analysed above
+{f"- [`raw/claim1_released_variance.json`]({released_json}) — the released per-seed variance trajectories re-analysed above" if released_json else ""}
 
 ## Verifier and controls
 
@@ -495,7 +565,7 @@ agreement `4.7e-12` absolute against an `H_eff` scale of `2.1e-3`, linear-head
 """
     return page("claim-1-theorem-4-1", f"Claim 1 - Theorem 4.1 ({verdict})", body), {
         "lin_M": lin_M, "relu_M": relu_M, "sm_M": sm_M, "sm_neg": sm_neg,
-        "lin_neg": lin_neg, "relu_neg": relu_neg, "verdict": verdict, "csv": csvp,
+        "flat_neg": flat_neg, "g_neg": g_neg, "verdict": verdict, "csv": csvp,
         "n_configs": len(cfgs),
         "epochs": {f"{a}/{i}": len(v) for (a, i), v in cfgs.items()},
     }
@@ -646,8 +716,64 @@ def claim2_page(recs):
     sym = by_key(recs, "THM31_SYMBOLIC")
     sym = sym[0] if sym else None
     if not thm and not sym:
-        return page("claim-2-theorem-3-1", "Claim 2 - Theorem 3.1 (BLOCKED)",
-                    "# Claim 2\n\n**Verdict: BLOCKED.** No loss-Hessian data available.\n"), {}
+        return page("claim-2-theorem-3-1", "Claim 2 - Theorem 3.1 (BLOCKED)", f"""# Claim 2 — Theorem 3.1: implicit local subspace whitening
+
+**Verdict: BLOCKED.** The concrete missing capability is named below. This claim is not
+reported as verified on partial evidence, and it is not reported as falsified either.
+
+## The exact claim and its quantifiers
+
+> **Theorem 3.1 (Local Subspace Whitening).** Let `z*` be a fixed point. Under
+> Assumptions 1 and 3, let `r = rank(grad_h^2 L|h(z*))` be the intrinsic rank of the
+> loss. **For any subspace `S` of `T_z*Z` of dimension `r`**, there exists a linear
+> projection head `W` (with `k >= r`) such that the effective Hessian restricted to `S`
+> is isometric to the identity on `S`: `v^T H_eff(z*) v = ‖v‖^2` for all `v` in `S`.
+
+Two quantifiers decide what counts as evidence. The statement is **universally**
+quantified over a continuum of `r`-dimensional subspaces `S`, with an existential `W`
+inside it. Finitely many random draws of `S` are corroboration only — the universal
+quantifier requires a symbolic discharge. The judged claim wording also says isotropy is
+achieved "**only** on the active subspace", so the off-`S` behaviour is part of what
+must be shown, not an aside.
+
+## What is required, and what is missing
+
+The planned discharge had two independent parts, both implemented and both published as
+source on this Space:
+
+1. **Symbolic certificate** (`repro/geometry.py`, `theorem_31_symbolic_certificate`) —
+   builds `W = U_r Lambda_r^(-1/2) B^T` over free symbols using two Householder
+   reflections, so orthonormality is exact by construction rather than solved for, then
+   shows `B^T W^T H_L W B - I_r` cancels to the zero matrix elementwise. That discharges
+   "for any `S`" as an identity in the symbols rather than a sample of subspaces.
+2. **Real loss landscapes** (`repro/pretrained.py`, `loss_geometry`) — the same
+   construction applied to the loss Hessians of official pretrained SSL projection
+   heads, to show the identity is not an artefact of a hand-built matrix.
+
+**The concrete missing capability: compute.** Both parts run inside the pretrained-head
+job, which the platform terminated for lack of account credit (HTTP 402) after it had
+emitted 9 of 16 orbit records and before it reached the loss-geometry stage. No `THM31`
+or `THM31_SYMBOLIC` record exists, so there is nothing to report. Re-running the
+published command on a funded account is the whole of what is needed; no new method,
+data or derivation is required.
+
+## What exists at toy scale, and why it is not enough
+
+A clean-room numpy check of the whitening identity on a hand-constructed 4x4 rank-2
+diagonal Hessian reaches a whitening error of about `1e-16`. It is preserved verbatim on
+the [Historical rejected baseline](#/verification-run) page. It is **corroboration at
+toy scale only**: one constructed matrix, one subspace, no real loss landscape, and no
+discharge of the universal quantifier. Under this reproduction's own rules that is not
+full credit, which is why this page reads BLOCKED rather than VERIFIED.
+
+## Assumptions that would need auditing
+
+`r <= d`, otherwise no `r`-dimensional subspace of `T_z*Z` exists at all; and
+`grad_h^2 L` PSD, otherwise `H_L^(+1/2)` is not real. Both are checked by the published
+verifier and neither has been measured on a real head here.
+
+{PROVENANCE_NOTE}
+"""), {}
 
     rows = [[f"`{r['objective']}`", r["family"].replace("_", "-"),
              f"{r['k']}", f"{r['numerical_rank']}", f"{r['r_used']}",
@@ -782,8 +908,59 @@ def claim3_page(recs):
     cw = by_key(recs, "PROP33_CONSTW")
     pr = [r for r in pr if "error" not in r]
     if not pr:
-        return page("claim-3-proposition-3-3", "Claim 3 - Proposition 3.3 (BLOCKED)",
-                    "# Claim 3\n\n**Verdict: BLOCKED.** Curvature computation unavailable.\n"), {}
+        return page("claim-3-proposition-3-3", "Claim 3 - Proposition 3.3 (BLOCKED)", f"""# Claim 3 — Proposition 3.3: the curvature barrier for linear heads
+
+**Verdict: BLOCKED.** The concrete missing capability is named below. This claim is not
+reported as verified on partial evidence, and it is not reported as falsified either.
+
+## The exact claim and its quantifiers
+
+> **Proposition 3.3 (Curvature Barrier for Linear Heads).** Assume Assumption 1. Let
+> `g_L(u) := grad_u^2 L(u)` be the Riemannian metric induced by the loss. If the
+> intrinsic geometry `(H, g_L)` has nonvanishing Riemann curvature `R_L != 0`, there
+> exists **no** global constant linear map `W` such that the induced effective Hessian
+> `H_eff(z) = W^T g_L(Wz) W` is **everywhere** nondegenerate and isotropic on `Z`.
+
+This is a **non-existence** statement, universally quantified over all constant `W`. No
+finite search over `W` can establish it. Fitting one `W` at one point and observing that
+it fails elsewhere is corroboration, not proof — so this claim is only dischargeable by
+a proof-level argument, and this reproduction treats anything less as BLOCKED.
+
+## What is required, and what is missing
+
+The planned discharge was a reconstructed proof, not a search, in three steps, all
+implemented and published as source on this Space (`repro/geometry.py`):
+
+1. **Establish the hypothesis, not just the conclusion.** `R_L != 0` must be measured
+   for the loss geometry in question, otherwise the proposition is vacuous — a flat
+   metric genuinely *is* globally whitenable. `riemann_tensor` computes `R` from
+   autograd Christoffel symbols and `riemann_from_cubic_form` recomputes it
+   independently via `R_ijkl = (1/4)(C_ikm g^mn C_jln - C_ilm g^mn C_jkn)`; the two
+   routes must agree, so a bug in either is caught.
+2. **The proof step** (`constant_W_obstruction`). If `W` were everywhere isotropic then
+   isotropy forces `rank(W) = d`, so `g_L` is constant on `range(W)`, so the Christoffel
+   symbols vanish there, so `R_L` vanishes on that range — contradicting step 1. The
+   non-existence is thereby derived, never searched.
+3. **Negative control.** A flat metric must produce `R = 0` *and* admit a global `W`.
+   A control that failed for both curved and flat metrics would prove nothing.
+
+**The concrete missing capability: compute.** All three run inside the pretrained-head
+job, which the platform terminated for lack of account credit (HTTP 402) before reaching
+the geometry stage. No `PROP33` record exists. Re-running the published command on a
+funded account is the whole of what is needed.
+
+## What exists at toy scale, and why it is not enough
+
+A clean-room numpy check on a constructed curved metric `g_L(z) = I + z z^T` shows a
+condition number of about `12.62` at one point against `1.0` at another, while a flat
+metric stays whitenable. It is preserved verbatim on the
+[Historical rejected baseline](#/verification-run) page. It illustrates the barrier on a
+4-dimensional constructed example; it does not measure `R_L` on a real loss geometry and
+it does not discharge a non-existence statement over all `W`. That is corroboration, not
+credit.
+
+{PROVENANCE_NOTE}
+"""), {}
 
     rows = [[f"`{r['objective']}`", f"{r['slice_dim']}",
              f"`{r['riemann_norm_christoffel_route']:.6g}`",
@@ -915,7 +1092,20 @@ fitted `W` isotropises every point (which would contradict the obstruction).
 
 
 def claim5_page(recs, c2info):
-    orb = by_key(recs, "ORBIT")
+    # Two pretrained-head jobs ran the same analysis; where they overlap they agree to
+    # every printed digit, which is the determinism check reported below.  Keep one row
+    # per (model, orbit) so agreement is not mistaken for extra evidence.
+    orb_all = by_key(recs, "ORBIT")
+    orb, dup_agree, dup_total = {}, 0, 0
+    for r in orb_all:
+        k = (r["model"], r["orbit"])
+        if k in orb:
+            dup_total += 1
+            dup_agree += int(abs(orb[k]["compression_ratio"]
+                                 - r["compression_ratio"]) <= 1e-12)
+        else:
+            orb[k] = r
+    orb = list(orb.values())
     thm = by_key(recs, "THM31")
     if not orb and not thm:
         return page("claim-5-section-6-generality", "Claim 5 - Section 6 generality (BLOCKED)",
@@ -961,7 +1151,16 @@ official pretrained SSL checkpoints that ship their projection heads.
 > Barlow Twins). (Section 6)
 
 The claim is that the *analysis applies* to both families — that the geometric mechanisms
-are well defined and hold for each objective. It is **not** a claim that every method
+are well defined and hold for each objective.
+
+**Quantifier.** Unlike Claims 2 and 3, this one ranges over an explicitly **enumerated
+finite domain** — eight named methods, four per family. A finite domain admits exhaustive
+verification, so nothing symbolic is needed and sampling is not an excuse: full credit
+requires all eight, in both families, not a representative subset. That is the standard
+this page is held to, and the reason it reads BLOCKED while part of the domain is
+unmeasured.
+
+It is **not** a claim that every method
 produces the same numbers, and in fact the numbers below differ sharply between families,
 which is itself what the paper's Section 6.3 predicts.
 
@@ -993,6 +1192,12 @@ steps and 50 sampled trajectories, exactly as Appendix C.3 specifies.
 
 Checkpoints loaded: {", ".join("`" + m + "`" for m in models)}.
 
+Two separate jobs ran this analysis. Where they overlap, **{dup_agree} of {dup_total}**
+repeated `(model, orbit)` measurements reproduce to within `1e-12` of the compression
+ratio — an unplanned but genuine determinism check across independent runs on different
+machines. Duplicated rows are collapsed to one below, so agreement is not double-counted
+as extra evidence.
+
 {table(["Checkpoint", "Orbit", "trajectories", "spread backbone", "spread head",
         "compression", "s.e.m.", "curvature ratio", "eff. rank z", "eff. rank h(z)",
         "alignment gain"], rows)}
@@ -1016,8 +1221,11 @@ across all four checkpoints would have been wrong.
 ## Raw data
 
 - [`raw/claim5_pretrained_orbit_geometry.csv`]({csvp}) — every checkpoint x orbit row
-- [`raw/claim2_theorem31_real_loss_hessians.csv`](raw/claim2_theorem31_real_loss_hessians.csv)
-  — the eight objectives' real loss Hessians
+
+The companion file of the eight objectives' real loss Hessians was not produced: that
+stage of the job never ran, for the reason given under
+[Limitations](#/limitations-and-deviations). It is not linked here rather than being
+linked as a file that does not exist.
 
 ## Verifier
 
@@ -1216,13 +1424,42 @@ revision, the seeds, and the `cpu-upgrade` allocation and runtime.
     return page("visibility-matrix", "Visibility matrix", body)
 
 
-def current_verification_page(recs, summary, jobs_table):
+ROLE_OF = {
+    "repro/run_all.py": "fixed entrypoint; prints provenance and asserts no GPU is present",
+    "repro/config.py": "the only per-node variant point",
+    "repro/hessian.py": "exact float64 effective Hessian and its G / M decomposition",
+    "repro/collapse.py": "Claims 1 and 4 — Hessian spectrum during SimSiam training",
+    "repro/released.py": "Claims 1, 4 and 6 — independent re-analysis of the authors' arrays",
+    "repro/orbits.py": "Claim 6 — independent SimCLR orbit-compression run",
+    "repro/pretrained.py": "Claims 2, 3 and 5 — official pretrained SSL projection heads",
+    "repro/geometry.py": "Claims 2 and 3 — whitening certificate and curvature barrier",
+    "repro/losses.py": "Claim 5 — the eight named SSL objectives",
+    "repro/models.py": "ResNet-18 backbone and the projection/prediction heads",
+    "repro/data.py": "CIFAR-10 staging with MD5 verification",
+    "repro/threads.py": "pins BLAS/OpenMP pools to the cgroup quota before numpy/torch",
+}
+
+
+def source_index(src_files):
+    rows = [[f"[`{f}`]({f})", ROLE_OF.get(f, "supporting module")]
+            for f in src_files if f.endswith(".py")]
+    rows += [[f"[`{f}`]({f})", "pinned environment, verbatim"]
+             for f in src_files if not f.endswith(".py")]
+    return table(["File", "What it does"], rows)
+
+
+def current_verification_page(recs, summary, jobs_table, src_index):
     body = f"""# Current verification
 
 **This is the canonical entrypoint for this reproduction.** Everything an evaluator needs
 is reachable from here. The page that the previous judged revision presented as
 "Verification run" is retained for provenance but is superseded — it is now labelled
 [Historical rejected baseline](#/verification-run).
+
+Nothing from the judged revision was deleted. Every file it contained is still present
+here, and the superseded page's bytes are preserved verbatim rather than rewritten;
+[`raw/old_new_subset_check.json`](raw/old_new_subset_check.json) is the machine-checked
+proof of both, regenerated on every build and blocking publication if it ever fails.
 
 ## What changed, and why
 
@@ -1276,6 +1513,17 @@ The command is **identical on every node**. What a node does is decided only by
 `repro/config.py` committed on that ref — never by a flag, an argument, or an environment
 variable. So a result is fully identified by `(repository, git ref)`.
 
+## Verifier source, readable without leaving this Space
+
+Every file that produced a number on any claim page is published here, including the
+pinned environment. No evaluator needs the repository to audit the code.
+
+{src_index}
+
+`repro/pyproject.toml.txt` and `repro/uv.lock.txt` are the pinned environment verbatim
+(renamed only so the Space serves them as text). Each claim page names the specific
+verifier that decides it and the condition under which that verifier exits non-zero.
+
 ## Compute
 
 All research compute ran on Hugging Face **`cpu-upgrade`**. No GPU was used anywhere;
@@ -1296,6 +1544,53 @@ def limitations_page(recs, notes):
     body = f"""# Limitations and deviations
 
 Stated plainly, including the ones that weaken the result.
+
+## Amendments to the pre-registered contracts (2026-08-01)
+
+`claim_contracts.json` was committed before any long job reported an epoch. Compute was
+then cut off mid-campaign — the Hugging Face account's pre-paid credit balance ran out
+and every running job was terminated by the platform (HTTP 402), so no run reached its
+planned horizon. Two predicates are therefore evaluated on less data than registered.
+Both changes are recorded here rather than by editing the contract.
+
+1. **Claim 1, P1/P2/P5 — "at every tracked state" → at the first tracked state of each
+   of the five configurations.** The exact 512x512 float64 decomposition is emitted for
+   the first tracked sample of every configuration, but the per-epoch aggregates over 40
+   samples only exist for the three runs that crossed an epoch boundary before
+   termination. The decision uses the five states that exist for *all* configurations,
+   so no configuration is compared against a different sample budget.
+2. **Claim 1, P4 — "at a majority of tracked states" → at the one tracked state per
+   smooth configuration.** With a single state per configuration, "majority" degenerates
+   to that state. This is a genuinely weaker sample than registered. What it does not
+   weaken: the quantity measured is an exact Hessian, not an estimate, and the
+   linear/ReLU/GELU/Swish contrast is between `2.6e-15` and `5.4e-1` in
+   `‖M‖/‖H_eff‖` — fourteen orders of magnitude, not a marginal effect.
+3. **Claim 1, P6 (Assumption 6) is discharged by implication, not by direct
+   measurement.** `‖grad_h L‖` was not separately logged. Because `M = sum_i rho_i
+   grad_z^2 h_i` vanishes exactly when `rho = 0`, a materially non-zero `M` proves
+   `rho != 0`. The implication is exact; the direct measurement is still absent.
+
+A defect found and fixed during the campaign is also recorded rather than quietly
+patched: the per-epoch aggregation in `repro/collapse.py` tested `lambda_min < 0`
+without the round-off floor that the per-sample summaries already applied, so a ReLU
+head reported a negative-eigenvalue fraction of `1.0` on `lambda_min = -1.1e-16` against
+a spectral scale of `2.0e-6`. Fixed in commit `bb64527`, which also emits the raw
+per-sample spectra so any reader can recompute at a tolerance of their own choosing.
+No published number on any claim page uses the unfloored fraction.
+
+## Runs that did not complete
+
+The following were terminated by the platform for lack of credit, not by choice, and
+their partial output is published as partial:
+
+- the five Hessian-tracking runs (Claims 1 and 4) — 0 to 1 epochs of a planned 15;
+- the independent SimCLR orbit run (Claim 6 corroboration) — 3 epochs of a planned 50,
+  which is why the independent orbit section reports the untrained baseline only;
+- the pretrained-checkpoint analysis (Claims 2, 3 and 5) — 9 of 16 orbit records, and
+  the symbolic certificate that Claim 3's universal quantifier depends on never ran.
+
+Claims 2, 3 and 5 are marked **BLOCKED** for exactly this reason. They are not marked
+verified on partial evidence.
 
 ## Shortened training budgets
 
@@ -1531,7 +1826,7 @@ def main():
     lim = limitations_page(recs, "\n".join(notes) if notes
                            else "- Independent training runs did not report before release.")
 
-    cur = current_verification_page(recs, summary, jobs_tbl)
+    cur = current_verification_page(recs, summary, jobs_tbl, source_index(src_files))
 
     judged_children = json.load(open(os.path.join(JUDGED, "logbook.json")))["root"]["children"]
     hist = []

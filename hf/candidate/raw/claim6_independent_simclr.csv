@@ -1,0 +1,2 @@
+epoch,spread_backbone,spread_head,compression_ratio,control_random_head_ratio,D_intra_reduction,D_inter_reduction,class_orbit_separation,curvature_ratio
+0,0.00654195,0.00634515,1.031,1.006,1.015,1.016,0.9994,0.9953

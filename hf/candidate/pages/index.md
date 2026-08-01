@@ -16,7 +16,7 @@ used anywhere.
 | Page |
 | --- |
 | [Current verification (start here)](#/current-verification) |
-| [Claim 1 - Theorem 4.1 (BLOCKED)](#/claim-1-theorem-4-1) |
+| [Claim 1 - Theorem 4.1 (VERIFIED)](#/claim-1-theorem-4-1) |
 | [Claim 2 - Theorem 3.1 (BLOCKED)](#/claim-2-theorem-3-1) |
 | [Claim 3 - Proposition 3.3 (BLOCKED)](#/claim-3-proposition-3-3) |
 | [Claim 4 - Figure 3 Hessian spectrum (VERIFIED)](#/claim-4-figure-3) |

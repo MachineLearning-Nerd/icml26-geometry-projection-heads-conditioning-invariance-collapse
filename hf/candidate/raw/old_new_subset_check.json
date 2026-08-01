@@ -11,8 +11,11 @@
   "pages/limitations-and-deviations/page.md",
   "pages/visibility-matrix/page.md",
   "raw/assumptions_audit.csv",
+  "raw/claim1_4_hessian_tracking.csv",
+  "raw/claim1_released_variance.json",
   "raw/claim4_released_hessian_runs.csv",
   "raw/claim5_pretrained_orbit_geometry.csv",
+  "raw/claim6_independent_simclr.csv",
   "raw/claim6_orbit_compression.json",
   "raw/claim6_per_orbit_spread.csv",
   "repro/__init__.py",
@@ -31,7 +34,7 @@
   "repro/threads.py",
   "repro/uv.lock.txt"
  ],
- "candidate_files": 47,
+ "candidate_files": 50,
  "is_superset": true,
  "judged_files": 17,
  "old_files_modified": [

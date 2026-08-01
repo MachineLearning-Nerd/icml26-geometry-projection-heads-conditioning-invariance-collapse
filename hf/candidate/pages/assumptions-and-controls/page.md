@@ -47,7 +47,11 @@ Section 4.1 states that "in standard MSE-based objectives, the intrinsic Hessian
 loss is PSD", and Theorem 4.1 part 1's conclusion depends on it. Measured at real
 training states:
 
-(independent runs not yet reported)
+| Head / init | min lambda_min of grad_h^2 L (ambient cosine) | min lambda_min restricted to the sphere's tangent space | grad_h^2 L for the MSE objective |
+| --- | --- | --- | --- |
+| `gelu` / collapsed | `-8995` | `-97.06` | exactly 1.0 (identity) |
+| `linear` / collapsed | `-561.7` | `-4.188` | exactly 1.0 (identity) |
+| `relu` / collapsed | `-2083` | `-108.8` | exactly 1.0 (identity) |
 
 For the SimSiam negative-cosine objective the ambient loss Hessian is **strongly
 indefinite** — cosine similarity is scale-invariant, so the radial direction contributes
@@ -87,6 +91,12 @@ them passes for every implementation.
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.

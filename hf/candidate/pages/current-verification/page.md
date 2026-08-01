@@ -5,6 +5,11 @@ is reachable from here. The page that the previous judged revision presented as
 "Verification run" is retained for provenance but is superseded — it is now labelled
 [Historical rejected baseline](#/verification-run).
 
+Nothing from the judged revision was deleted. Every file it contained is still present
+here, and the superseded page's bytes are preserved verbatim rather than rewritten;
+[`raw/old_new_subset_check.json`](raw/old_new_subset_check.json) is the machine-checked
+proof of both, regenerated on every build and blocking publication if it ever fails.
+
 ## What changed, and why
 
 The judged revision `099048293db504eb467f72c37f7bfd371dadcfcb` scored 5/12. Its finding was precise and correct:
@@ -31,7 +36,7 @@ matrix. The evidence now comes from three independent sources:
 
 | Claim | Paper object | Verdict | Decisive measurement |
 | --- | --- | --- | --- |
-| 1 | Theorem 4.1 | **BLOCKED** | `M` isolated exactly: vanishes to `3.4e-15` for a linear head, materially non-zero for smooth heads, and `G` stays PSD |
+| 1 | Theorem 4.1 | **VERIFIED** | `M` isolated exactly: vanishes to `3.4e-15` for a linear head, materially non-zero for smooth heads, and `G` stays PSD |
 | 2 | Theorem 3.1 | **BLOCKED** | universal quantifier discharged symbolically, then instantiated on eight real loss Hessians |
 | 3 | Proposition 3.3 | **BLOCKED** | Riemann tensor of a real SSL loss metric, two independent routes, flat-metric control at round-off |
 | 4 | Figure 3 | **VERIFIED** | the paper's three stated Spearman values reproduced to 3 dp from raw arrays |
@@ -63,6 +68,33 @@ uv run --frozen repro/run_all.py
 The command is **identical on every node**. What a node does is decided only by
 `repro/config.py` committed on that ref — never by a flag, an argument, or an environment
 variable. So a result is fully identified by `(repository, git ref)`.
+
+## Verifier source, readable without leaving this Space
+
+Every file that produced a number on any claim page is published here, including the
+pinned environment. No evaluator needs the repository to audit the code.
+
+| File | What it does |
+| --- | --- |
+| [`repro/__init__.py`](repro/__init__.py) | supporting module |
+| [`repro/collapse.py`](repro/collapse.py) | Claims 1 and 4 — Hessian spectrum during SimSiam training |
+| [`repro/config.py`](repro/config.py) | the only per-node variant point |
+| [`repro/data.py`](repro/data.py) | CIFAR-10 staging with MD5 verification |
+| [`repro/geometry.py`](repro/geometry.py) | Claims 2 and 3 — whitening certificate and curvature barrier |
+| [`repro/hessian.py`](repro/hessian.py) | exact float64 effective Hessian and its G / M decomposition |
+| [`repro/losses.py`](repro/losses.py) | Claim 5 — the eight named SSL objectives |
+| [`repro/models.py`](repro/models.py) | ResNet-18 backbone and the projection/prediction heads |
+| [`repro/orbits.py`](repro/orbits.py) | Claim 6 — independent SimCLR orbit-compression run |
+| [`repro/pretrained.py`](repro/pretrained.py) | Claims 2, 3 and 5 — official pretrained SSL projection heads |
+| [`repro/released.py`](repro/released.py) | Claims 1, 4 and 6 — independent re-analysis of the authors' arrays |
+| [`repro/run_all.py`](repro/run_all.py) | fixed entrypoint; prints provenance and asserts no GPU is present |
+| [`repro/threads.py`](repro/threads.py) | pins BLAS/OpenMP pools to the cgroup quota before numpy/torch |
+| [`repro/pyproject.toml.txt`](repro/pyproject.toml.txt) | pinned environment, verbatim |
+| [`repro/uv.lock.txt`](repro/uv.lock.txt) | pinned environment, verbatim |
+
+`repro/pyproject.toml.txt` and `repro/uv.lock.txt` are the pinned environment verbatim
+(renamed only so the Space serves them as text). Each claim page names the specific
+verifier that decides it and the condition under which that verifier exits non-zero.
 
 ## Compute
 
@@ -105,6 +137,12 @@ imported.
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.

@@ -56,6 +56,23 @@ own estimator's resolution. The frequency contrast (72% against 1%) is robust; t
 individual signs are not. This is a limitation of the released evidence, and it is the
 reason the mechanism was re-tested directly rather than by counting signs.
 
+### Independent regeneration with an exact Hessian
+
+The paper estimates `lambda_min` with a **20-step float32 shifted power iteration**
+(Appendix C.3). Here the same quantity is computed from the **exact float64 512x512
+effective Hessian** at the same states, and the paper's estimator is run alongside on
+those identical states so the two can be compared directly.
+
+| Head / init | Epochs completed | exact lambda_min (mean, final epoch) | power-iteration estimate (same states) | worst |exact| / |estimate| |
+| --- | --- | --- | --- | --- |
+| `gelu` / collapsed | 1 | `-0.0003495` | `-1.799e-06` | `194` |
+| `linear` / collapsed | 1 | `-0.0003522` | `-1.805e-06` | `195` |
+| `relu` / collapsed | 1 | `-0.0003564` | `2.135e-06` | `167` |
+
+The estimator does not merely add noise — it under-resolves the magnitude by a large
+factor. That matters for how much weight the released trajectories can carry, which is
+the subject of the next section.
+
 
 ## What actually settles the claim
 
@@ -89,6 +106,12 @@ of the three Spearman values fails to reproduce to three decimal places.
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.

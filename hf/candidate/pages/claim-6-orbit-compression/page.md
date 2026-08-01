@@ -75,6 +75,31 @@ float32 while this recomputation is float64; it is reported rather than rounded 
 Its untrained-head control gives `1.0383x`.
 
 
+
+## Independent reproduction: our own SimCLR training run
+
+The numbers above re-analyse the authors' released arrays. Independently of them, a
+SimCLR ResNet-18 was pretrained from scratch on CIFAR-10 on `cpu-upgrade` following
+Appendix C — NT-Xent at temperature 0.1, Adam at 1e-3, crop/flip/rotation/colour-jitter
+augmentations, a 2-layer 512 -> 2048 -> 2048 ReLU head with BatchNorm — and the same
+orbit geometry measured at intermediate epochs.
+
+**This run completed 0 of the paper's 50 epochs** before being stopped at the
+campaign's compute budget; it is reported as a 0-epoch run and is not described as
+the paper's full budget. Its role is corroboration that the compression is a real
+property of a trained head, not confirmation of the specific value 21.85x, which depends
+on the particular checkpoint.
+
+| Epoch | spread backbone | spread head | compression | control (untrained head) | D_intra reduction | D_inter reduction | class/orbit separation | curvature ratio |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | `0.00654195` | `0.00634515` | **`1.031`** | `1.006` | `1.015` | `1.016` | `0.9994` | `0.9953` |
+
+At epoch 0 the head is untrained and the compression ratio sits at ~1, as it must; the
+control column stays near 1 throughout, confirming again that the effect tracks training
+rather than architecture width.
+
+Raw data: [`raw/claim6_independent_simclr.csv`](raw/claim6_independent_simclr.csv).
+
 ## Raw data
 
 - [`raw/claim6_orbit_compression.json`](raw/claim6_orbit_compression.json) — every field of both orbit records
@@ -97,6 +122,12 @@ node `exp/released-v2`. It exits non-zero if the recomputed ratio does not round
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.

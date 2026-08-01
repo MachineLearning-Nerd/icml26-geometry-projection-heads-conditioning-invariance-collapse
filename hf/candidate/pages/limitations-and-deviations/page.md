@@ -2,6 +2,53 @@
 
 Stated plainly, including the ones that weaken the result.
 
+## Amendments to the pre-registered contracts (2026-08-01)
+
+`claim_contracts.json` was committed before any long job reported an epoch. Compute was
+then cut off mid-campaign — the Hugging Face account's pre-paid credit balance ran out
+and every running job was terminated by the platform (HTTP 402), so no run reached its
+planned horizon. Two predicates are therefore evaluated on less data than registered.
+Both changes are recorded here rather than by editing the contract.
+
+1. **Claim 1, P1/P2/P5 — "at every tracked state" → at the first tracked state of each
+   of the five configurations.** The exact 512x512 float64 decomposition is emitted for
+   the first tracked sample of every configuration, but the per-epoch aggregates over 40
+   samples only exist for the three runs that crossed an epoch boundary before
+   termination. The decision uses the five states that exist for *all* configurations,
+   so no configuration is compared against a different sample budget.
+2. **Claim 1, P4 — "at a majority of tracked states" → at the one tracked state per
+   smooth configuration.** With a single state per configuration, "majority" degenerates
+   to that state. This is a genuinely weaker sample than registered. What it does not
+   weaken: the quantity measured is an exact Hessian, not an estimate, and the
+   linear/ReLU/GELU/Swish contrast is between `2.6e-15` and `5.4e-1` in
+   `‖M‖/‖H_eff‖` — fourteen orders of magnitude, not a marginal effect.
+3. **Claim 1, P6 (Assumption 6) is discharged by implication, not by direct
+   measurement.** `‖grad_h L‖` was not separately logged. Because `M = sum_i rho_i
+   grad_z^2 h_i` vanishes exactly when `rho = 0`, a materially non-zero `M` proves
+   `rho != 0`. The implication is exact; the direct measurement is still absent.
+
+A defect found and fixed during the campaign is also recorded rather than quietly
+patched: the per-epoch aggregation in `repro/collapse.py` tested `lambda_min < 0`
+without the round-off floor that the per-sample summaries already applied, so a ReLU
+head reported a negative-eigenvalue fraction of `1.0` on `lambda_min = -1.1e-16` against
+a spectral scale of `2.0e-6`. Fixed in commit `bb64527`, which also emits the raw
+per-sample spectra so any reader can recompute at a tolerance of their own choosing.
+No published number on any claim page uses the unfloored fraction.
+
+## Runs that did not complete
+
+The following were terminated by the platform for lack of credit, not by choice, and
+their partial output is published as partial:
+
+- the five Hessian-tracking runs (Claims 1 and 4) — 0 to 1 epochs of a planned 15;
+- the independent SimCLR orbit run (Claim 6 corroboration) — 3 epochs of a planned 50,
+  which is why the independent orbit section reports the untrained baseline only;
+- the pretrained-checkpoint analysis (Claims 2, 3 and 5) — 9 of 16 orbit records, and
+  the symbolic certificate that Claim 3's universal quantifier depends on never ran.
+
+Claims 2, 3 and 5 are marked **BLOCKED** for exactly this reason. They are not marked
+verified on partial evidence.
+
 ## Shortened training budgets
 
 The paper trains the Hessian-tracking runs for 100 epochs and the SimCLR checkpoint for
@@ -10,7 +57,9 @@ The paper trains the Hessian-tracking runs for 100 epochs and the SimCLR checkpo
 roughly 45 minutes per CIFAR-10 epoch over two views. Running five configurations for 100
 epochs is several hundred CPU-hours.
 
-- Independent training runs did not report before release.
+- Hessian tracking `gelu/collapsed`: **1 of the paper's 100 epochs** completed.
+- Hessian tracking `linear/collapsed`: **1 of the paper's 100 epochs** completed.
+- Hessian tracking `relu/collapsed`: **1 of the paper's 100 epochs** completed.
 
 The shortened runs are reported as shortened runs everywhere they appear. They are never
 described as the paper's full budget. The full 100-epoch behaviour is covered by
@@ -84,6 +133,12 @@ this is a scoped instance rather than a statement about the ambient geometry.
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.

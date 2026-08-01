@@ -11,7 +11,16 @@ official pretrained SSL checkpoints that ship their projection heads.
 > Barlow Twins). (Section 6)
 
 The claim is that the *analysis applies* to both families — that the geometric mechanisms
-are well defined and hold for each objective. It is **not** a claim that every method
+are well defined and hold for each objective.
+
+**Quantifier.** Unlike Claims 2 and 3, this one ranges over an explicitly **enumerated
+finite domain** — eight named methods, four per family. A finite domain admits exhaustive
+verification, so nothing symbolic is needed and sampling is not an excuse: full credit
+requires all eight, in both families, not a representative subset. That is the standard
+this page is held to, and the reason it reads BLOCKED while part of the domain is
+unmeasured.
+
+It is **not** a claim that every method
 produces the same numbers, and in fact the numbers below differ sharply between families,
 which is itself what the paper's Section 6.3 predicts.
 
@@ -41,7 +50,13 @@ normalisation, sweeping four continuous augmentation orbits — rotation [0deg, 
 [-0.4, 0.4], saturation [0, 2], Gaussian blur sigma in [0.1, 3.0] — with 12 interpolation
 steps and 50 sampled trajectories, exactly as Appendix C.3 specifies.
 
-Checkpoints loaded: `barlowtwins_resnet50`, `dino_resnet50`, `dino_vits16`.
+Checkpoints loaded: `barlowtwins_resnet50`, `dino_resnet50`, `dino_vits16`, `vicreg_resnet50`.
+
+Two separate jobs ran this analysis. Where they overlap, **8 of 8**
+repeated `(model, orbit)` measurements reproduce to within `1e-12` of the compression
+ratio — an unplanned but genuine determinism check across independent runs on different
+machines. Duplicated rows are collapsed to one below, so agreement is not double-counted
+as extra evidence.
 
 | Checkpoint | Orbit | trajectories | spread backbone | spread head | compression | s.e.m. | curvature ratio | eff. rank z | eff. rank h(z) | alignment gain |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -57,6 +72,7 @@ Checkpoints loaded: `barlowtwins_resnet50`, `dino_resnet50`, `dino_vits16`.
 | `dino_vits16` | hue | 50 | `992.782` | `83.6075` | **`11.87`** | ±`1.8` | `0.4703` | `3.69` | `2.57` | `+0.1136` |
 | `dino_vits16` | rotation | 50 | `2036.68` | `263.801` | **`7.721`** | ±`0.21` | `0.5967` | `3.68` | `2.8` | `+0.4019` |
 | `dino_vits16` | saturation | 50 | `506.904` | `47.8142` | **`10.6`** | ±`1.4` | `0.4196` | `2.09` | `1.84` | `+0.112` |
+| `vicreg_resnet50` | rotation | 50 | `112.823` | `451.239` | **`0.25`** | ±`0.027` | `2.285` | `3.98` | `4.06` | `-0.3615` |
 
 ### The dichotomy this exposes
 
@@ -77,8 +93,11 @@ across all four checkpoints would have been wrong.
 ## Raw data
 
 - [`raw/claim5_pretrained_orbit_geometry.csv`](raw/claim5_pretrained_orbit_geometry.csv) — every checkpoint x orbit row
-- [`raw/claim2_theorem31_real_loss_hessians.csv`](raw/claim2_theorem31_real_loss_hessians.csv)
-  — the eight objectives' real loss Hessians
+
+The companion file of the eight objectives' real loss Hessians was not produced: that
+stage of the job never ran, for the reason given under
+[Limitations](#/limitations-and-deviations). It is not linked here rather than being
+linked as a file that does not exist.
 
 ## Verifier
 
@@ -97,6 +116,12 @@ load.
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
 | Paper source of record | `https://ar5iv.labs.arxiv.org/html/2605.17180`, SHA-256 `c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4` |
 | Authors' released code and raw arrays | [https://github.com/farischaudhry/projection-head-geometry](https://github.com/farischaudhry/projection-head-geometry) @ `117231d60fee34d4906d1f16c5007e13a96a4d94` |
+
+Also on every claim page: the [assumption audit and negative
+controls](#/assumptions-and-controls), the [limitations and
+deviations](#/limitations-and-deviations) including amendments to the pre-registered
+contracts, and the [visibility matrix](#/visibility-matrix) listing what an evaluator can
+reach for each claim. Start from [Current verification](#/current-verification).
 
 A node is fully identified by `(repository, git ref)`: what it does is decided only by
 `repro/config.py` committed on that ref, never by a flag or an environment variable.
