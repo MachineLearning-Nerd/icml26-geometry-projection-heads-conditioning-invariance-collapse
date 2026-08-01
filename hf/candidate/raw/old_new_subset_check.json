@@ -13,6 +13,7 @@
   "raw/assumptions_audit.csv",
   "raw/claim1_4_hessian_tracking.csv",
   "raw/claim1_released_variance.json",
+  "raw/claim2_theorem31_real_loss_hessians.csv",
   "raw/claim4_released_hessian_runs.csv",
   "raw/claim5_pretrained_orbit_geometry.csv",
   "raw/claim6_independent_simclr.csv",
@@ -24,6 +25,7 @@
   "repro/data.py",
   "repro/geometry.py",
   "repro/hessian.py",
+  "repro/local_geometry.py",
   "repro/losses.py",
   "repro/models.py",
   "repro/orbits.py",
@@ -34,7 +36,7 @@
   "repro/threads.py",
   "repro/uv.lock.txt"
  ],
- "candidate_files": 50,
+ "candidate_files": 52,
  "is_superset": true,
  "judged_files": 17,
  "old_files_modified": [
@@ -52,6 +54,7 @@
   "repro/data.py",
   "repro/geometry.py",
   "repro/hessian.py",
+  "repro/local_geometry.py",
   "repro/losses.py",
   "repro/models.py",
   "repro/orbits.py",

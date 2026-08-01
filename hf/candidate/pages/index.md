@@ -8,8 +8,11 @@ arXiv [2605.17180](https://arxiv.org/abs/2605.17180) ·
 OpenReview [y4uR1LFClc](https://openreview.net/forum?id=y4uR1LFClc) ·
 reproduction repository [https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse](https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse)
 
-All research compute ran on Hugging Face `cpu-upgrade` (8 vCPU, measured). No GPU was
-used anywhere.
+All research compute ran on CPU — Hugging Face `cpu-upgrade` (8 vCPU, measured) for the
+training and pretrained-checkpoint runs, and an 8-core local CPU for the symbolic
+certificate and the real-loss-landscape geometry. **No GPU was used anywhere.** Each
+result states which platform produced it; see
+[Current verification → Compute](#/current-verification).
 
 ## Pages
 
@@ -17,7 +20,7 @@ used anywhere.
 | --- |
 | [Current verification (start here)](#/current-verification) |
 | [Claim 1 - Theorem 4.1 (VERIFIED)](#/claim-1-theorem-4-1) |
-| [Claim 2 - Theorem 3.1 (BLOCKED)](#/claim-2-theorem-3-1) |
+| [Claim 2 - Theorem 3.1 whitening (BLOCKED)](#/claim-2-theorem-3-1) |
 | [Claim 3 - Proposition 3.3 (BLOCKED)](#/claim-3-proposition-3-3) |
 | [Claim 4 - Figure 3 Hessian spectrum (VERIFIED)](#/claim-4-figure-3) |
 | [Claim 5 - Section 6 generality (BLOCKED)](#/claim-5-section-6-generality) |

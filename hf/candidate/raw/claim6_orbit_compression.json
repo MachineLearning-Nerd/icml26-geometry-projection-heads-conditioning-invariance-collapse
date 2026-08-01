@@ -1,5 +1,6 @@
 [
  {
+  "_compute": "hf-cpu-upgrade",
   "_job": "6a6d7b1ba00abefd4b28ac69",
   "bootstrap_ci95": [
    20.723994123401216,
@@ -50,6 +51,7 @@
   ]
  },
  {
+  "_compute": "hf-cpu-upgrade",
   "_job": "6a6d7b1ba00abefd4b28ac69",
   "bootstrap_ci95": [
    3687.7850766482247,
@@ -100,6 +102,7 @@
   ]
  },
  {
+  "_compute": "hf-cpu-upgrade",
   "_job": "6a6d7bf06b79c09949c1e004",
   "bootstrap_ci95": [
    20.723994123401216,
@@ -150,6 +153,7 @@
   ]
  },
  {
+  "_compute": "hf-cpu-upgrade",
   "_job": "6a6d7bf06b79c09949c1e004",
   "bootstrap_ci95": [
    3687.7850766482247,

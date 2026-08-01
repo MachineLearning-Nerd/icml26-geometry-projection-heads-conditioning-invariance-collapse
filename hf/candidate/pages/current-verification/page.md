@@ -82,6 +82,7 @@ pinned environment. No evaluator needs the repository to audit the code.
 | [`repro/data.py`](repro/data.py) | CIFAR-10 staging with MD5 verification |
 | [`repro/geometry.py`](repro/geometry.py) | Claims 2 and 3 — whitening certificate and curvature barrier |
 | [`repro/hessian.py`](repro/hessian.py) | exact float64 effective Hessian and its G / M decomposition |
+| [`repro/local_geometry.py`](repro/local_geometry.py) | supporting module |
 | [`repro/losses.py`](repro/losses.py) | Claim 5 — the eight named SSL objectives |
 | [`repro/models.py`](repro/models.py) | ResNet-18 backbone and the projection/prediction heads |
 | [`repro/orbits.py`](repro/orbits.py) | Claim 6 — independent SimCLR orbit-compression run |
@@ -98,12 +99,24 @@ verifier that decides it and the condition under which that verifier exits non-z
 
 ## Compute
 
-All research compute ran on Hugging Face **`cpu-upgrade`**. No GPU was used anywhere;
-`repro/run_all.py` asserts `torch.cuda.is_available() is False` and aborts otherwise.
-Estimated core requirement before each run: 8. Measured allocation on every job: cgroup
-quota **8 vCPU** on an AMD EPYC 7R13, while `os.cpu_count()` reports 64 — so
-`src/threads.py` pins every BLAS/OpenMP pool to the real quota before numpy or torch is
-imported.
+**No GPU was used anywhere.** Every runner asserts `torch.cuda.is_available() is False`
+and aborts otherwise. Two CPU platforms were used, and every number on this Space is
+tagged with the one that produced it:
+
+| Platform | Cores | Used for |
+| --- | --- | --- |
+| Hugging Face `cpu-upgrade` | cgroup quota **8 vCPU** on AMD EPYC 7R13 (`os.cpu_count()` reports 64) | the training runs, the released-array re-analysis and the pretrained orbit geometry |
+| Local CPU | **8 cores**, macOS on Apple silicon | the Theorem 3.1 symbolic certificate and the real-loss-landscape geometry for Claims 2, 3 and 5 |
+
+The local runs are a **deviation from this campaign's default**, taken deliberately and
+recorded rather than hidden: the geometry nodes had twice been terminated on Hugging
+Face before executing, and the symbolic certificate turned out not to terminate at all
+in its original form. Both platforms have 8 cores and run the identical lockfile
+(`torch 2.13.0`, `numpy 2.5.1`, `sympy 1.14.0`), so the results are directly comparable;
+`src/threads.py` pins every BLAS/OpenMP pool to the real core count before numpy or
+torch is imported, on both. Nothing about a result depends on which of the two ran it —
+the symbolic certificate is exact rational algebra, and the geometry numbers are
+deterministic at fixed seed.
 
 ### Jobs
 
@@ -120,11 +133,13 @@ imported.
 | `6a6d7cc46b79c09949c1e031` | `exp/collapse-linear-collapsed@baeb36d` | collapse | 14h | linear head, pseudo-collapsed init (negative control) |
 | `6a6d7cc7a00abefd4b28acb7` | `exp/collapse-swish-normal@d9681bc` | collapse | 14h | Swish head, standard init |
 | `6a6d7cca6b79c09949c1e034` | `exp/orbits@b2e5cee` | orbits | 26h | SimCLR pretraining + orbit geometry |
-| Node | Timeout | Harvest point | Why that is enough |
-| --- | --- | --- | --- |
-| collapse ×5 | 14h | ~10 epochs (~6h) | the sign structure of lambda_min and the size of the interaction term M are per-state quantities, reported every epoch; more epochs add trajectory length, not a different answer |
-| orbits | 26h | whatever epoch is reached at the ~10-12h mark | orbit geometry is evaluated every 5 epochs, and the paper's exact 21.85x is already verified against the released arrays — this run is independent corroboration |
-| pretrained | 3h | run to completion | it is short |
+| Node | Est. runtime | How it was made to fit |
+| --- | --- | --- |
+| pretrained ×4 (one per checkpoint) | ~25-40 min | was one ~3h job over 4 checkpoints; splitting per checkpoint also removes the risk that one slow model starves the rest |
+| geometry certificate (Claims 2, 3) | ~10 min | symbolic; no checkpoint download, no training. Was buried at the end of the pretrained job, which is why it never ran — it is now its own node and cannot be starved |
+| losses ×1 (Claim 5 part A) | ~15 min | eight objectives, analytic Hessians only |
+| collapse ×5, epoch-chunked | ~45 min each | `max_steps_per_epoch` bounds the tracked steps, and a chunk resumes nothing — each job reports its own states, which is sound because lambda_min and M are **per-state** quantities, not trajectory-dependent |
+| orbits | ~50 min | fewer epochs, evaluated at the epochs reached; the exact 21.85x is already banked from the released arrays, so this stays corroboration |
 
 
 ### Provenance and how to re-run

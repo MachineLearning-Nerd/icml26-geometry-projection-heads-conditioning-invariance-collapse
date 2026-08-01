@@ -115,50 +115,97 @@ def check_theorem_31(H_L, d, n_subspaces=25, seed=0, rel_tol=1e-8):
     }
 
 
-def theorem_31_symbolic_certificate():
-    """Machine-checkable symbolic discharge of the universal quantifier.
+SYMBOLIC_SIZES = ((1, 3, 2), (2, 4, 3), (2, 5, 4))
+SYMBOLIC_BUDGET_S = 300
 
-    Verifies B^T W^T H_L W B = I_r identically in symbolic (Lam, U, B), using exact
-    rational/symbolic algebra rather than floating point, for a general orthonormal U_r
-    and general positive Lam_r.
+
+def _certificate_for(r, k, d):
+    """Discharge the universal quantifier at one (r, k, d) by ideal membership.
+
+    U (k x r) and B (d x r) are **fully free** symbolic matrices — no parameterisation
+    is imposed on them, so nothing restricts which subspace S = range(B) or which
+    eigenbasis U_r is covered.  The only hypotheses are the orthonormality relations
+
+        U^T U - I_r = 0        B^T B - I_r = 0
+
+    Showing that every entry of  B^T W^T H_L W B - I_r  reduces to 0 modulo the ideal
+    those relations generate proves the identity holds for *every* U and B satisfying
+    them — i.e. for every r-dimensional S and every rank-r PSD H_L of these dimensions.
+    That is a proof, not a sample of subspaces.
+
+    Two implementation points decide whether this terminates at all.  The eigenvalues
+    enter as lam_i = m_i^2 so that Lam^{-1/2} = diag(1/m_i) stays rational and no
+    radicals appear; and the m_i live in the *coefficient field* rather than among the
+    generators, which keeps the Groebner computation in 2*r*(k+d)/2 variables instead
+    of adding r more.  An earlier revision expanded a product of symbolic Householder
+    reflections with sqrt() entries and did not terminate in over ten minutes.
     """
     import sympy as sp
 
-    r, k, d = 2, 4, 3
-    lam = sp.symbols("l1:3", positive=True)
-    Lam = sp.diag(*lam)
+    U = sp.Matrix(k, r, lambda i, j: sp.Symbol(f"u{i}_{j}"))
+    B = sp.Matrix(d, r, lambda i, j: sp.Symbol(f"b{i}_{j}"))
+    m = sp.symbols(f"m1:{r + 1}", positive=True)
+    Lam = sp.diag(*[x ** 2 for x in m])
+    Linv = sp.diag(*[1 / x for x in m])
 
-    # A general orthonormal U_r (k x r): r columns of a symbolic Householder
-    # reflection, so U^T U = I_r holds identically for every v.
-    v = sp.Matrix(sp.symbols("v1:5"))
-    U = (sp.eye(k) - 2 * (v * v.T) / (v.T * v)[0])[:, :r]
-    orth_U = sp.expand(U.T * U - sp.eye(r))
-
-    # A general orthonormal B (d x r): r columns of a second symbolic Householder
-    # reflection, on free symbols independent of v.  Symbolic Gram-Schmidt/QR on a
-    # fully free d x r matrix produces nested radicals that do not simplify in
-    # reasonable time; a Householder reflection is orthogonal by construction and
-    # stays in rational functions of its parameters.
-    w = sp.Matrix(sp.symbols("w1:4"))
-    B = (sp.eye(d) - 2 * (w * w.T) / (w.T * w)[0])[:, :r]
-    orth_B = sp.expand(B.T * B - sp.eye(r))
+    rels = sorted({sp.expand(e) for e in
+                   list(U.T * U - sp.eye(r)) + list(B.T * B - sp.eye(r))} - {0},
+                  key=sp.default_sort_key)
+    gens = sorted(set(U) | set(B), key=lambda s: s.name)
 
     H_L = U * Lam * U.T
-    W = U * sp.diag(*[1 / sp.sqrt(x) for x in lam]) * B.T
-
-    iso = sp.expand(B.T * W.T * H_L * W * B) - sp.eye(r)
+    W = U * Linv * B.T
+    iso = sp.expand(B.T * W.T * H_L * W * B - sp.eye(r))
     # the same W must annihilate S-perp, i.e. W B_perp = 0; equivalently W = (W B) B^T
     kill = sp.expand(W - (W * B) * B.T)
 
-    def zero(M):
-        return all(sp.cancel(sp.expand(e)) == 0 for e in M)
+    G = sp.groebner(rels, *gens, order="grevlex", domain=sp.QQ.frac_field(*m))
+    in_ideal = lambda M: all(G.reduce(sp.expand(e))[1] == 0 for e in M)  # noqa: E731
     return {
-        "U_orthonormal": zero(orth_U),
-        "B_orthonormal": zero(orth_B),
-        "isotropy_identity_holds": zero(iso),
-        "annihilates_S_perp": zero(kill),
         "r": r, "k": k, "d": d,
+        "n_relations": len(rels),
+        "n_free_entries": len(gens),
+        "groebner_basis_size": len(G.exprs),
+        "isotropy_identity_in_ideal": in_ideal(iso),
+        "annihilates_S_perp_in_ideal": in_ideal(kill),
     }
+
+
+def theorem_31_symbolic_certificate(sizes=SYMBOLIC_SIZES, budget_s=SYMBOLIC_BUDGET_S):
+    """Machine-checkable discharge of Theorem 3.1's universal quantifier.
+
+    Each size is attempted under its own wall-clock budget and reported as proven or
+    as timed out; a size that does not finish can never silently become a pass, and
+    can never block the sizes after it.
+    """
+    import signal
+    import time
+
+    def _raise(*_):
+        raise TimeoutError()
+
+    out, ok = [], True
+    for (r, k, d) in sizes:
+        t0 = time.perf_counter()
+        prev = signal.signal(signal.SIGALRM, _raise)
+        signal.alarm(budget_s)
+        try:
+            rec = _certificate_for(r, k, d)
+            rec["proven"] = bool(rec["isotropy_identity_in_ideal"]
+                                 and rec["annihilates_S_perp_in_ideal"])
+        except TimeoutError:
+            rec = {"r": r, "k": k, "d": d, "proven": False,
+                   "timed_out_after_s": budget_s}
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, prev)
+        rec["seconds"] = round(time.perf_counter() - t0, 2)
+        ok = ok and rec["proven"]
+        out.append(rec)
+        print("THM31_SYMBOLIC_SIZE " + json.dumps(rec), flush=True)
+    return {"sizes": out, "all_sizes_proven": ok,
+            "method": "ideal membership modulo the orthonormality relations, "
+                      "over fully free symbolic U and B"}
 
 
 # --------------------------------------------------------------------------
