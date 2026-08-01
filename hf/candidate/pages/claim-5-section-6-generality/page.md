@@ -1,6 +1,6 @@
 # Claim 5 — Section 6: generality across contrastive and non-contrastive methods
 
-**Verdict: BLOCKED.** Tested two ways: the eight named objectives as real loss
+**Verdict: VERIFIED.** Tested two ways: the eight named objectives as real loss
 implementations whose real Hessians go through the paper's own machinery, and four
 official pretrained SSL checkpoints that ship their projection heads.
 
@@ -33,10 +33,19 @@ cosine, VICReg's invariance + variance-hinge + covariance penalty, and Barlow Tw
 cross-correlation objective. Their **exact Hessians** at real head outputs of a real
 trained SSL model were then put through Theorem 3.1's construction.
 
-Contrastive family tested: none.
+**Seven distinct loss functions, not eight.** SimCLR's NT-Xent and InfoNCE are the same
+objective at the same temperature, and `repro/losses.py` implements `simclr` as a direct
+call to `infonce` rather than duplicating the algebra. Their rows below are therefore
+*identical by construction* and are **one** measurement reported under both of the
+paper's names — not two independent confirmations. The paper lists them separately, so
+they are listed separately here, but a reader counting independent evidence should count
+seven. Every other pair of objectives is a genuinely different function with a different
+Hessian.
+
+Contrastive family tested: `dino`, `infonce`, `moco`, `simclr`.
 Non-contrastive / decorrelation family tested:
-none.
-Worst isotropy error across all of them: **`nan`**. Per-objective spectra,
+`barlow_twins`, `byol`, `simsiam`, `vicreg`.
+Worst isotropy error across all of them: **`9.63e-11`**. Per-objective spectra,
 ranks and errors are on [Claim 2](#/claim-2-theorem-3-1) and in its CSV.
 
 No hand-constructed matrix and no synthetic representation appears anywhere in this

@@ -1,0 +1,4 @@
+CKPT fetched barlowtwins_resnet50.pth (1,396,861,721 B) in 817.3s
+barlowtwins_resnet50 done in 817.3s
+CKPT fetched vicreg_resnet50.pth (698,663,972 B) in 197.3s
+vicreg_resnet50 done in 197.3s

@@ -28,13 +28,13 @@
    },
    {
     "slug": "claim-2-theorem-3-1",
-    "title": "Claim 2 - Theorem 3.1 whitening (BLOCKED)",
+    "title": "Claim 2 - Theorem 3.1 whitening (VERIFIED)",
     "file": "pages/claim-2-theorem-3-1/page.md",
     "children": []
    },
    {
     "slug": "claim-3-proposition-3-3",
-    "title": "Claim 3 - Proposition 3.3 (BLOCKED)",
+    "title": "Claim 3 - Proposition 3.3 curvature barrier (VERIFIED)",
     "file": "pages/claim-3-proposition-3-3/page.md",
     "children": []
    },
@@ -46,7 +46,7 @@
    },
    {
     "slug": "claim-5-section-6-generality",
-    "title": "Claim 5 - Section 6 generality (BLOCKED)",
+    "title": "Claim 5 - Section 6 generality (VERIFIED)",
     "file": "pages/claim-5-section-6-generality/page.md",
     "children": []
    },

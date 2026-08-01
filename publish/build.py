@@ -935,6 +935,11 @@ each.
 Worst isotropy error across every objective and every subspace draw: **`{worst_iso:.3g}`**.
 Worst off-subspace leakage: **`{worst_leak:.3g}`**.
 
+The `infonce` and `simclr` rows are identical by construction: NT-Xent and InfoNCE are
+the same objective at the same temperature, so `repro/losses.py` implements one in terms
+of the other. That is one measurement under two of the paper's names, not two
+independent instantiations.
+
 ### Assumption audit
 
 `r <= d` is required for an `r`-dimensional subspace of the tangent space to exist at
@@ -966,7 +971,15 @@ def claim3_page(recs):
     pr = by_key(recs, "PROP33")
     ctrl = by_key(recs, "PROP33_CONTROL")
     cw = by_key(recs, "PROP33_CONSTW")
-    pr = [r for r in pr if "error" not in r]
+    # Assumption 1 requires g_L = grad^2 L to *be* a Riemannian metric, i.e. positive
+    # definite.  Where the real loss Hessian is indefinite the proposition's hypothesis
+    # simply does not hold at that point, so such a record is evidence of nothing and is
+    # excluded from the verdict rather than counted toward it.  Both exclusions are
+    # reported on the page; neither is silent.
+    pr_failed = [r for r in pr if "error" in r]
+    pr_indef = [r for r in pr if "error" not in r
+                and r.get("metric_lambda_min", 1.0) <= 0.0]
+    pr = [r for r in pr if "error" not in r and r.get("metric_lambda_min", 1.0) > 0.0]
     if not pr:
         return page("claim-3-proposition-3-3", "Claim 3 - Proposition 3.3 (BLOCKED)", f"""# Claim 3 — Proposition 3.3: the curvature barrier for linear heads
 
@@ -1049,12 +1062,42 @@ credit.
     max_gap = max(r["routes_relative_difference"] for r in pr)
     ctrl_R = c["riemann_norm"] if c else float("nan")
     verdict = "VERIFIED" if (max_R > 1e-6 and max_gap < 1e-6 and ctrl_R < 1e-8) else "BLOCKED"
+    n_obj_ok = len({r["objective"] for r in pr})
+    indef_list = ", ".join(
+        f"`{r['objective']}`/`{r['source']}` at `{r['metric_lambda_min']:.3e}`"
+        for r in pr_indef) or "none"
 
     body = f"""# Claim 3 — Proposition 3.3: the curvature barrier for linear heads
 
 **Verdict: {verdict}.** The non-existence step is discharged as a proof, not a search,
 and both of its hypotheses are then established numerically on real SSL loss geometries
 with a flat-metric control that behaves the opposite way.
+
+## What this verdict rests on, and what was excluded
+
+Eight curvature computations were attempted (four objectives x two real pretrained
+checkpoints). **{len(pr)} qualify**; the rest are excluded, and excluding them is not a
+detail to bury:
+
+| Outcome | Count | Why it is excluded |
+| --- | --- | --- |
+| Positive-definite `g_L`, curvature computed | **{len(pr)}** | counted |
+| Indefinite `g_L` (`lambda_min(g_L) < 0`) | {len(pr_indef)} | Assumption 1 requires `g_L = grad^2 L` to *be* a Riemannian metric. Where the real loss Hessian is indefinite it is not one, so the proposition's hypothesis does not hold there and the point is evidence of nothing — in either direction |
+| Fourth-derivative failure | {len(pr_failed)} | the curvature tensor needs four derivatives of the loss; these objectives still route through a backward formula that masks a degenerate case in place, which is not differentiable at that order |
+
+The indefinite cases are a **finding, not just an attrition**: at real head outputs of
+real pretrained SSL models, the loss Hessians of InfoNCE and SimSiam are indefinite —
+{indef_list}.
+That is the same assumption violation this reproduction reports for the SimSiam cosine
+objective under [Claim 1](#/claim-1-theorem-4-1), found independently here by a different
+computation. It means Proposition 3.3 simply does not speak to those objectives, which is
+a statement about the proposition's scope rather than about its truth.
+
+So the verdict below rests on a **narrow base: {len(pr)} loss geometries, from
+{n_obj_ok} objective(s)**, plus the flat-metric control and the
+proof-level non-existence argument. That is enough to make the proposition non-vacuous
+and to exhibit the barrier, and it is not enough to claim the barrier was surveyed across
+SSL objectives. Both halves of that sentence are meant.
 
 ## The exact claim and its quantifiers
 
@@ -1232,6 +1275,15 @@ self-distillation cross-entropy, BYOL with an explicit predictor, SimSiam's stop
 cosine, VICReg's invariance + variance-hinge + covariance penalty, and Barlow Twins'
 cross-correlation objective. Their **exact Hessians** at real head outputs of a real
 trained SSL model were then put through Theorem 3.1's construction.
+
+**Seven distinct loss functions, not eight.** SimCLR's NT-Xent and InfoNCE are the same
+objective at the same temperature, and `repro/losses.py` implements `simclr` as a direct
+call to `infonce` rather than duplicating the algebra. Their rows below are therefore
+*identical by construction* and are **one** measurement reported under both of the
+paper's names — not two independent confirmations. The paper lists them separately, so
+they are listed separately here, but a reader counting independent evidence should count
+seven. Every other pair of objectives is a genuinely different function with a different
+Hessian.
 
 Contrastive family tested: {", ".join("`" + o + "`" for o in contrastive) or "none"}.
 Non-contrastive / decorrelation family tested:

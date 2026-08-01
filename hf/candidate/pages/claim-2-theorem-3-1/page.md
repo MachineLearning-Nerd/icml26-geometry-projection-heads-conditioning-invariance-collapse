@@ -1,6 +1,6 @@
 # Claim 2 — Theorem 3.1: local subspace whitening
 
-**Verdict: BLOCKED.** The universal quantifier is discharged symbolically, and the
+**Verdict: VERIFIED.** The universal quantifier is discharged symbolically, and the
 construction is then instantiated on the real loss Hessians of eight real SSL objectives
 at real head outputs of an official pretrained SSL checkpoint.
 
@@ -58,8 +58,8 @@ these dimensions.
 | `r` | `k` | `d` | orthonormality relations | free entries in `U`,`B` | Gröbner basis | isotropy in ideal | `W` annihilates `S`-perp | seconds |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | 3 | 2 | 2 | 5 | 2 | **True** | **True** | `0.04` |
-| 2 | 4 | 3 | 6 | 14 | 14 | **True** | **True** | `3.86` |
-| 2 | 5 | 4 | 6 | 18 | 14 | **True** | **True** | `16.58` |
+| 2 | 4 | 3 | 6 | 14 | 14 | **True** | **True** | `4.06` |
+| 2 | 5 | 4 | 6 | 18 | 14 | **True** | **True** | `16.09` |
 Every size reports **proven** (3 of
 3). A size that exceeds its wall-clock budget is recorded as timed out and
 can never be counted as a pass.
@@ -80,14 +80,35 @@ identically, so `H_eff = W^T H_L W` has rank exactly `r` with range `S`.
 
 The construction was then applied to the **real** Hessians `grad_h^2 L` of all eight SSL
 objectives named in Section 6, evaluated at real head outputs of an official pretrained
-SSL checkpoint on real CIFAR-10 images, for **0 random `r`-dimensional subspaces**
+SSL checkpoint on real CIFAR-10 images, for **25 random `r`-dimensional subspaces**
 each.
 
 | Objective | Family | k | numerical rank of grad_h^2 L | r used | worst isotropy error | worst off-subspace leakage | worst rank error | loss Hessian PSD |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `dino` | contrastive | 64 | 55 | 55 | `8.04e-11` | `1.4e-15` | 0 | True |
+| `dino` | contrastive | 64 | 1 | 1 | `1.78e-15` | `1.77e-16` | 0 | True |
+| `infonce` | contrastive | 64 | 6 | 6 | `2.93e-14` | `6.81e-16` | 0 | False |
+| `infonce` | contrastive | 64 | 63 | 63 | `6.57e-14` | `1.17e-16` | 0 | False |
+| `moco` | contrastive | 64 | 4 | 4 | `4.68e-15` | `5.96e-16` | 0 | False |
+| `moco` | contrastive | 64 | 63 | 63 | `3.68e-14` | `1.06e-16` | 0 | False |
+| `simclr` | contrastive | 64 | 6 | 6 | `2.93e-14` | `6.81e-16` | 0 | False |
+| `simclr` | contrastive | 64 | 63 | 63 | `6.57e-14` | `1.17e-16` | 0 | False |
+| `barlow_twins` | non-contrastive | 64 | 45 | 45 | `7.98e-15` | `6.07e-16` | 0 | False |
+| `barlow_twins` | non-contrastive | 64 | 1 | 1 | `1.55e-15` | `1.68e-16` | 0 | False |
+| `byol` | non-contrastive | 64 | 63 | 63 | `9.63e-11` | `2.7e-15` | 0 | False |
+| `byol` | non-contrastive | 64 | 1 | 1 | `1.44e-15` | `2.94e-16` | 0 | False |
+| `simsiam` | non-contrastive | 64 | 1 | 1 | `3e-15` | `3.79e-16` | 0 | False |
+| `simsiam` | non-contrastive | 64 | 1 | 1 | `1.33e-15` | `3.83e-16` | 0 | False |
+| `vicreg` | non-contrastive | 64 | 64 | 64 | `1.73e-14` | `8.59e-30` | 0 | True |
+| `vicreg` | non-contrastive | 64 | 64 | 64 | `1.75e-14` | `8.59e-30` | 0 | True |
 
-Worst isotropy error across every objective and every subspace draw: **`nan`**.
-Worst off-subspace leakage: **`nan`**.
+Worst isotropy error across every objective and every subspace draw: **`9.63e-11`**.
+Worst off-subspace leakage: **`2.7e-15`**.
+
+The `infonce` and `simclr` rows are identical by construction: NT-Xent and InfoNCE are
+the same objective at the same temperature, so `repro/losses.py` implements one in terms
+of the other. That is one measurement under two of the paper's names, not two
+independent instantiations.
 
 ### Assumption audit
 

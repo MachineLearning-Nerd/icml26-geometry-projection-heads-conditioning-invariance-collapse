@@ -8,10 +8,10 @@ of the reproduction repository's internals.
 | Claim | Canonical page | Code visible | Data inline | Raw link | Checker | Control | Exact claim tested | Reviewer verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | [link](#/claim-1-theorem-4-1) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
-| 2 | [link](#/claim-2-theorem-3-1) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
-| 3 | [link](#/claim-3-proposition-3-3) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
+| 2 | [link](#/claim-2-theorem-3-1) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
+| 3 | [link](#/claim-3-proposition-3-3) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
 | 4 | [link](#/claim-4-figure-3) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
-| 5 | [link](#/claim-5-section-6-generality) | yes | yes | yes | yes | yes | yes | **BLOCKED** |
+| 5 | [link](#/claim-5-section-6-generality) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
 | 6 | [link](#/claim-6-orbit-compression) | yes | yes | yes | yes | yes | yes | **VERIFIED** |
 
 ## What "visible" means here

@@ -20,10 +20,10 @@ result states which platform produced it; see
 | --- |
 | [Current verification (start here)](#/current-verification) |
 | [Claim 1 - Theorem 4.1 (VERIFIED)](#/claim-1-theorem-4-1) |
-| [Claim 2 - Theorem 3.1 whitening (BLOCKED)](#/claim-2-theorem-3-1) |
-| [Claim 3 - Proposition 3.3 (BLOCKED)](#/claim-3-proposition-3-3) |
+| [Claim 2 - Theorem 3.1 whitening (VERIFIED)](#/claim-2-theorem-3-1) |
+| [Claim 3 - Proposition 3.3 curvature barrier (VERIFIED)](#/claim-3-proposition-3-3) |
 | [Claim 4 - Figure 3 Hessian spectrum (VERIFIED)](#/claim-4-figure-3) |
-| [Claim 5 - Section 6 generality (BLOCKED)](#/claim-5-section-6-generality) |
+| [Claim 5 - Section 6 generality (VERIFIED)](#/claim-5-section-6-generality) |
 | [Claim 6 - Figure 5 orbit compression (VERIFIED)](#/claim-6-orbit-compression) |
 | [Assumptions and negative controls](#/assumptions-and-controls) |
 | [Limitations and deviations](#/limitations-and-deviations) |

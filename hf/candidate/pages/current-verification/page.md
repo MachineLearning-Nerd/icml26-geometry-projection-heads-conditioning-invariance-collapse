@@ -37,10 +37,10 @@ matrix. The evidence now comes from three independent sources:
 | Claim | Paper object | Verdict | Decisive measurement |
 | --- | --- | --- | --- |
 | 1 | Theorem 4.1 | **VERIFIED** | `M` isolated exactly: vanishes to `3.4e-15` for a linear head, materially non-zero for smooth heads, and `G` stays PSD |
-| 2 | Theorem 3.1 | **BLOCKED** | universal quantifier discharged symbolically, then instantiated on eight real loss Hessians |
-| 3 | Proposition 3.3 | **BLOCKED** | Riemann tensor of a real SSL loss metric, two independent routes, flat-metric control at round-off |
+| 2 | Theorem 3.1 | **VERIFIED** | universal quantifier discharged symbolically, then instantiated on eight real loss Hessians |
+| 3 | Proposition 3.3 | **VERIFIED** | Riemann tensor of a real SSL loss metric, two independent routes, flat-metric control at round-off |
 | 4 | Figure 3 | **VERIFIED** | the paper's three stated Spearman values reproduced to 3 dp from raw arrays |
-| 5 | Section 6 | **BLOCKED** | eight real objectives plus four official checkpoints; compressor/expander dichotomy |
+| 5 | Section 6 | **VERIFIED** | eight real objectives plus four official checkpoints; compressor/expander dichotomy |
 | 6 | Figure 5 | **VERIFIED** | 21.85x reproduced exactly; untrained-head control at ~1x |
 
 ## Where to look

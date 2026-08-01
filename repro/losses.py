@@ -19,7 +19,12 @@ import torch.nn.functional as F
 
 
 def _n(x, dim=-1):
-    return x / (x.norm(dim=dim, keepdim=True) + 1e-12)
+    # sqrt(sum of squares) rather than Tensor.norm: norm's backward masks the
+    # zero-norm case in place, which does not survive the third and fourth
+    # derivatives that Proposition 3.3's curvature tensor takes through this.
+    # The head outputs here are never the zero vector, so the two agree to
+    # machine precision.
+    return x / (torch.sqrt((x * x).sum(dim, keepdim=True) + 1e-30) + 1e-12)
 
 
 def infonce(pos, negs, temperature=0.1):
@@ -29,7 +34,10 @@ def infonce(pos, negs, temperature=0.1):
     def f(h):
         hh = _n(h)
         logits = torch.cat([(hh * p).sum().unsqueeze(0), N @ hh]) / temperature
-        return -logits[0] + torch.logsumexp(logits, 0)
+        # Stable log-sum-exp written out: torch.logsumexp masks -inf entries in
+        # place, which breaks the higher-order autograd Proposition 3.3 needs.
+        shift = logits.max().detach()
+        return -logits[0] + shift + torch.log(torch.exp(logits - shift).sum())
 
     return f
 
