@@ -1,0 +1,27 @@
+[project]
+name = "icml26-repro-y4ur1lfclc"
+version = "0.1.0"
+description = "Reproduction of 'The Geometry of Projection Heads: Conditioning, Invariance, and Collapse' (arXiv 2605.17180)"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "numpy>=2.2.6",
+    "scipy>=1.15.0",
+    "scikit-learn>=1.7.2",
+    "torch>=2.9.1",
+    "torchvision>=0.24.1",
+    "timm>=1.0.24",
+    "sympy>=1.13",
+]
+
+[tool.uv]
+package = false
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }

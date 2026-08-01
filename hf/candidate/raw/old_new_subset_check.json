@@ -14,9 +14,24 @@
   "raw/claim4_released_hessian_runs.csv",
   "raw/claim5_pretrained_orbit_geometry.csv",
   "raw/claim6_orbit_compression.json",
-  "raw/claim6_per_orbit_spread.csv"
+  "raw/claim6_per_orbit_spread.csv",
+  "repro/__init__.py",
+  "repro/collapse.py",
+  "repro/config.py",
+  "repro/data.py",
+  "repro/geometry.py",
+  "repro/hessian.py",
+  "repro/losses.py",
+  "repro/models.py",
+  "repro/orbits.py",
+  "repro/pretrained.py",
+  "repro/pyproject.toml.txt",
+  "repro/released.py",
+  "repro/run_all.py",
+  "repro/threads.py",
+  "repro/uv.lock.txt"
  ],
- "candidate_files": 32,
+ "candidate_files": 47,
  "is_superset": true,
  "judged_files": 17,
  "old_files_modified": [
@@ -26,5 +41,22 @@
  ],
  "old_not_in_new": [],
  "rejected_baseline_banner_bytes": 947,
- "rejected_baseline_bytes_preserved_verbatim": true
+ "rejected_baseline_bytes_preserved_verbatim": true,
+ "verifier_source_on_space": [
+  "repro/__init__.py",
+  "repro/collapse.py",
+  "repro/config.py",
+  "repro/data.py",
+  "repro/geometry.py",
+  "repro/hessian.py",
+  "repro/losses.py",
+  "repro/models.py",
+  "repro/orbits.py",
+  "repro/pretrained.py",
+  "repro/released.py",
+  "repro/run_all.py",
+  "repro/threads.py",
+  "repro/pyproject.toml.txt",
+  "repro/uv.lock.txt"
+ ]
 }

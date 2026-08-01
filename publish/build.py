@@ -1445,10 +1445,32 @@ def subset_check():
             "is_superset": not missing, "added": sorted(new - old)}
 
 
+def copy_verifier_source():
+    """Put the verifying source on the Space itself, so "code visible" is literal:
+    an evaluator can read every verifier without leaving the published artifact."""
+    dst = os.path.join(OUT, "repro")
+    os.makedirs(dst, exist_ok=True)
+    copied = []
+    for name in sorted(os.listdir(os.path.join(ROOT, "repro"))):
+        if name.endswith(".py"):
+            shutil.copy2(os.path.join(ROOT, "repro", name), os.path.join(dst, name))
+            copied.append(f"repro/{name}")
+    shutil.copy2(os.path.join(ROOT, "src", "threads.py"), os.path.join(dst, "threads.py"))
+    copied.append("repro/threads.py")
+    for name in ("pyproject.toml", "uv.lock"):
+        src = os.path.join(ROOT, name)
+        if os.path.exists(src):
+            shutil.copy2(src, os.path.join(dst, name + ".txt"))
+            copied.append(f"repro/{name}.txt")
+    return copied
+
+
 def main():
     recs = load_records()
     print(f"loaded {len(recs)} raw records from {JOBS}")
     copy_judged()
+    src_files = copy_verifier_source()
+    print(f"verifier source copied onto the Space: {len(src_files)} files")
 
     c6, c6rec = claim6_page(recs)
     indep, indep_csv = claim6_independent_section(recs)
@@ -1528,6 +1550,7 @@ def main():
         json.dump(lb, f, indent=1)
 
     chk = subset_check()
+    chk["verifier_source_on_space"] = src_files
     write_json("raw/old_new_subset_check.json", chk)
     print(json.dumps({"verdicts": verdicts, **{k: v for k, v in chk.items()
                                                if k != "added"}}, indent=1))

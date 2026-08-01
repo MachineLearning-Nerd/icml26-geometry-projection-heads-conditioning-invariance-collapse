@@ -1,5 +1,5 @@
 {
- "candidate_files": 33,
+ "candidate_files": 48,
  "files_with_possible_secrets": [],
  "judged_files": 17,
  "judged_set_is_subset": true,
@@ -27,7 +27,22 @@
   "raw/claim5_pretrained_orbit_geometry.csv": "f34229504deb6114009ac22f3469f7cfd9cfe5c1d3009e4d362d6ea60abccc8a",
   "raw/claim6_orbit_compression.json": "56a1f0456820a996a78fd882d0b07f1826c467ef70be03be28cde30756176e57",
   "raw/claim6_per_orbit_spread.csv": "e30a26cb9dc168ca06c528f54f6cb2718f8adc513d49f7173285350acd7df8af",
-  "raw/old_new_subset_check.json": "8395c3e25717dfb54622c5fb666d704125e63319b2c5ad499cc5255f5e9d36fd"
+  "raw/old_new_subset_check.json": "8954395fd7194d817885e909284968373f8943210c24879ee952ed5f4982ac1e",
+  "repro/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "repro/collapse.py": "578d6baa1055ea9d3437615cb777c24d2a2d243f093ffb59606b98479e4231d5",
+  "repro/config.py": "fd8cedd93a1ffd300af09ec4d0f40c831749d9154cb3d5b986fc8b6f529d798b",
+  "repro/data.py": "410ea75e79642ed31fe89d7991e05b01829e83e3c7ff6b05f730879a679045f2",
+  "repro/geometry.py": "a01512570acb9a97fda3fccdbb172a31509f550f9bcbbdb97e0af43c016998bc",
+  "repro/hessian.py": "b37d8f6d99aff87926ef80622695313ae7e710fdad845f37a97df244926b735f",
+  "repro/losses.py": "3cf7102671d622e41073e723850713ee8878273542d7218603aaffb528ae7582",
+  "repro/models.py": "1ee744647548a9a0702629174c106b158c9044d4cc322f96cf7fdabc7522699d",
+  "repro/orbits.py": "df75f4fdbb3826219b970e9003b9651946b991cac23f4a6bde0a31b927f8e3e2",
+  "repro/pretrained.py": "c11a00102ef8b44b409f5f409ecaa820a00cf563baf3594110026affa6aaa91d",
+  "repro/pyproject.toml.txt": "843d9df009bf963caf29fad40969cdcf5d61191cffe2181efb8a6a4f35374978",
+  "repro/released.py": "8eb998f33752236ef824a24c171b286a6d30930e955e4931c0416d147b26a54d",
+  "repro/run_all.py": "b00935976b0f73d7214e171359314ef7da0265954c1c377f0717c0621a9b97c0",
+  "repro/threads.py": "249c8d6f6f4bc5b08c76093e8ed8be73dce3ff53c52edf5fcbc9a6f821f943fd",
+  "repro/uv.lock.txt": "b071dccd3593515efb13c2e80dfa5d1273a7e450947df4449550a93aa7c5e706"
  },
  "not_uploaded_left_untouched_on_space": [
   ".gitattributes",
@@ -66,6 +81,21 @@
   "raw/claim5_pretrained_orbit_geometry.csv",
   "raw/claim6_orbit_compression.json",
   "raw/claim6_per_orbit_spread.csv",
-  "raw/old_new_subset_check.json"
+  "raw/old_new_subset_check.json",
+  "repro/__init__.py",
+  "repro/collapse.py",
+  "repro/config.py",
+  "repro/data.py",
+  "repro/geometry.py",
+  "repro/hessian.py",
+  "repro/losses.py",
+  "repro/models.py",
+  "repro/orbits.py",
+  "repro/pretrained.py",
+  "repro/pyproject.toml.txt",
+  "repro/released.py",
+  "repro/run_all.py",
+  "repro/threads.py",
+  "repro/uv.lock.txt"
  ]
 }
