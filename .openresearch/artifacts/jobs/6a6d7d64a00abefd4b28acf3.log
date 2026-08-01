@@ -1,0 +1,63 @@
+BOOTSTRAP ref=d5d6b325694b4ef85d6196bf90c4f14725ab2619 sha=d5d6b325694b4ef85d6196bf90c4f14725ab2619
+warning: `VIRTUAL_ENV=/root/.cache/uv/environments-v2/run-node-aca24d34c2eff8b0` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+Using CPython 3.12.12 interpreter at: /usr/local/bin/python3
+Creating virtual environment at: .venv
+Downloading torch (182.9MiB)
+Downloading numpy (15.9MiB)
+Downloading scipy (33.7MiB)
+Downloading networkx (2.0MiB)
+Downloading torchvision (1.8MiB)
+Downloading hf-xet (4.2MiB)
+Downloading pillow (6.6MiB)
+Downloading scikit-learn (8.7MiB)
+Downloading sympy (6.0MiB)
+Downloading timm (2.5MiB)
+ Downloaded torchvision
+ Downloaded hf-xet
+ Downloaded timm
+ Downloaded networkx
+ Downloaded pillow
+ Downloaded scikit-learn
+ Downloaded numpy
+ Downloaded sympy
+ Downloaded scipy
+ Downloaded torch
+Installed 32 packages in 549ms
+PROVENANCE {"git_sha": "d5d6b325694b4ef85d6196bf90c4f14725ab2619", "stage": "pretrained", "cgroup_cpu_quota": 8, "os_cpu_count": 64, "torch": "2.13.0+cpu", "numpy": "2.5.1", "python": "3.12.12", "machine": "x86_64", "cuda_available": false, "hf_job_flavor": "cpu-upgrade"}
+DATA fetched cifar-10-python.tar.gz (170,498,071 B) in 2077.9s
+CKPT fetched dino_resnet50.pth (387,249,791 B) in 8.1s
+CKPT dino_resnet50 sha256=6ff7c9aaa300b23d1763bdfa0fd56effb1e142208576fc5e963b746d6b3ad866
+Downloading: "https://github.com/facebookresearch/dino/zipball/main" to /root/.cache/torch/hub/main.zip
+/repo/.venv/lib/python3.12/site-packages/torchvision/models/_utils.py:207: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/repo/.venv/lib/python3.12/site-packages/torchvision/models/_utils.py:222: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+Downloading: "https://dl.fbaipublicfiles.com/dino/dino_resnet50_pretrain/dino_resnet50_pretrain.pth" to /root/.cache/torch/hub/checkpoints/dino_resnet50_pretrain.pth
+
+CKPT_READY dino_resnet50 z=(2, 2048) h=(2, 60000)
+CKPT fetched dino_vits16.pth (352,247,243 B) in 8.4s
+CKPT dino_vits16 sha256=9aba1fa8e6875e8413b413e8b8d7b843413280b33b972bd313d2ace8c4129943
+Downloading: "https://dl.fbaipublicfiles.com/dino/dino_deitsmall16_pretrain/dino_deitsmall16_pretrain.pth" to /root/.cache/torch/hub/checkpoints/dino_deitsmall16_pretrain.pth
+
+CKPT_READY dino_vits16 z=(2, 384) h=(2, 65536)
+CKPT fetched vicreg_resnet50.pth (698,663,972 B) in 15.3s
+CKPT vicreg_resnet50 sha256=a1bee82ee7485d1ec34adae25d2f50b1491b0acc829525caac157438ebbfab5c
+CKPT_FAILED vicreg_resnet50: AttributeError: Can't get attribute 'exclude_bias_and_norm' on <module '__main__' from '/repo/repro/run_all.py'>
+CKPT fetched barlowtwins_resnet50.pth (1,396,861,721 B) in 30.8s
+CKPT barlowtwins_resnet50 sha256=b3d2bfdffc9e1ab326e90af505304792ad01ea05cb2b84b8ffeb42ac287b35cb
+BACKBONE_LOAD missing=0 unexpected=0
+CKPT_READY barlowtwins_resnet50 z=(2, 2048) h=(2, 8192)
+MODELS_LOADED ['barlowtwins_resnet50', 'dino_resnet50', 'dino_vits16']
+ORBIT {"model": "dino_resnet50", "orbit": "rotation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 8.968692267431138, "spread_head_mean": 2.3731734213204567, "compression_ratio": 3.7791980083953876, "compression_ratio_sem": 0.4709586250384675, "curvature_backbone": 0.5577395140439705, "curvature_head": 0.005778173078029825, "curvature_ratio": 0.010359985140974415, "eff_rank_backbone": 5.1209920819356025, "eff_rank_head": 2.718596361578893, "alignment_gain": 0.4603340619802475}
+ORBIT {"model": "dino_resnet50", "orbit": "hue", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 2.7336972817958567, "spread_head_mean": 0.5059115936438122, "compression_ratio": 5.403507877940667, "compression_ratio_sem": 0.6695340677121355, "curvature_backbone": 0.2784862318459032, "curvature_head": 0.0023458149114607414, "curvature_ratio": 0.00842345022197998, "eff_rank_backbone": 4.713744808383155, "eff_rank_head": 3.029588676432961, "alignment_gain": 0.10746663570404053}
+ORBIT {"model": "dino_resnet50", "orbit": "saturation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 1.5944629841938576, "spread_head_mean": 0.3006565633871041, "compression_ratio": 5.303270170559822, "compression_ratio_sem": 0.8006540696863483, "curvature_backbone": 0.0893145359675463, "curvature_head": 0.0008630549047180985, "curvature_ratio": 0.009663095658154703, "eff_rank_backbone": 2.278486241077875, "eff_rank_head": 2.159777997427878, "alignment_gain": 0.1063725459575653}
+ORBIT {"model": "dino_resnet50", "orbit": "blur", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 3.45243601275895, "spread_head_mean": 0.5291294455428006, "compression_ratio": 6.524747473120331, "compression_ratio_sem": 0.6812631402204409, "curvature_backbone": 0.0907322408321894, "curvature_head": 0.0008519793881460274, "curvature_ratio": 0.00939004019223746, "eff_rank_backbone": 1.6236411309100323, "eff_rank_head": 1.5564519864917445, "alignment_gain": 0.12390578627586364}
+ORBIT {"model": "dino_vits16", "orbit": "rotation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 2036.6830077878644, "spread_head_mean": 263.8013502383082, "compression_ratio": 7.720517753028943, "compression_ratio_sem": 0.21038252334389135, "curvature_backbone": 0.40975211099128617, "curvature_head": 0.24449058911819332, "curvature_ratio": 0.5966792667076526, "eff_rank_backbone": 3.678534844336155, "eff_rank_head": 2.8025572041556135, "alignment_gain": 0.40188067555427553}
+ORBIT {"model": "dino_vits16", "orbit": "hue", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 992.7817975171872, "spread_head_mean": 83.6074678227056, "compression_ratio": 11.874319643580614, "compression_ratio_sem": 1.7778586936631235, "curvature_backbone": 0.24432944343198273, "curvature_head": 0.11490385625763654, "curvature_ratio": 0.47028247862245004, "eff_rank_backbone": 3.6894174032004305, "eff_rank_head": 2.5746142108784165, "alignment_gain": 0.11358770608901977}
+ORBIT {"model": "dino_vits16", "orbit": "saturation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 506.90442530418767, "spread_head_mean": 47.814230057849336, "compression_ratio": 10.601539012358783, "compression_ratio_sem": 1.4334683545456524, "curvature_backbone": 0.0709806425802862, "curvature_head": 0.029779956458034215, "curvature_ratio": 0.4195503925503366, "eff_rank_backbone": 2.0868522934953293, "eff_rank_head": 1.8362853021280328, "alignment_gain": 0.11204323053359985}
+ORBIT {"model": "dino_vits16", "orbit": "blur", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 325.0583016084181, "spread_head_mean": 29.996112244601285, "compression_ratio": 10.836681065791193, "compression_ratio_sem": 4.578260225101047, "curvature_backbone": 0.04556237651247935, "curvature_head": 0.018086945545903975, "curvature_ratio": 0.39697107417015515, "eff_rank_backbone": 1.6973556048513105, "eff_rank_head": 1.5177842280473175, "alignment_gain": 0.04720210075378418}
+ORBIT {"model": "barlowtwins_resnet50", "orbit": "rotation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 8.223412581825245, "spread_head_mean": 18.241291737695516, "compression_ratio": 0.45081306192979825, "compression_ratio_sem": 0.050373376061758554, "curvature_backbone": 0.5090519281513273, "curvature_head": 1.1337778902257305, "curvature_ratio": 2.2272342516079995, "eff_rank_backbone": 4.13216706125872, "eff_rank_head": 3.8551287193834787, "alignment_gain": -0.351994948053034}
+ORBIT {"model": "barlowtwins_resnet50", "orbit": "hue", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 2.799401963330192, "spread_head_mean": 10.19633772084704, "compression_ratio": 0.27454974913263636, "compression_ratio_sem": 0.03870945766748601, "curvature_backbone": 0.26192132526359685, "curvature_head": 0.47637238284545125, "curvature_ratio": 1.8187613489128138, "eff_rank_backbone": 4.344640179303889, "eff_rank_head": 2.852330144985885, "alignment_gain": -0.14254333898425103}
+ORBIT {"model": "barlowtwins_resnet50", "orbit": "saturation", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 1.581359993521693, "spread_head_mean": 5.367970277124694, "compression_ratio": 0.2945917938965814, "compression_ratio_sem": 0.03763641782489896, "curvature_backbone": 0.0853438880005455, "curvature_head": 0.16664393385905718, "curvature_ratio": 1.9526170855725724, "eff_rank_backbone": 2.2351368970390326, "eff_rank_head": 2.2041030560218213, "alignment_gain": -0.14227861881256104}
+ORBIT {"model": "barlowtwins_resnet50", "orbit": "blur", "n_trajectories": 50, "steps": 12, "spread_backbone_mean": 1.0545680180461923, "spread_head_mean": 5.058579965816479, "compression_ratio": 0.20847115695955593, "compression_ratio_sem": 0.06571151901405918, "curvature_backbone": 0.04814902155755643, "curvature_head": 0.08083452967552528, "curvature_ratio": 1.6788405467159329, "eff_rank_backbone": 1.6082272292991906, "eff_rank_head": 1.6144200442521488, "alignment_gain": -0.03918237805366516}
+REPS dino_resnet50 H1=(64, 60000) H2=(64, 60000)

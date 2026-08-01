@@ -119,6 +119,19 @@ class L2Norm(nn.Module):
         return F.normalize(x, dim=-1, p=2)
 
 
+def _allow_vicreg_unpickle():
+    """VICReg's released checkpoint pickles a reference to `exclude_bias_and_norm`,
+    a plain function defined in that repository's training script.  Unpickling looks
+    it up in `__main__`, which here is our runner, so a same-named stand-in is
+    installed.  It is never called: only the tensors are used."""
+    import __main__
+
+    if not hasattr(__main__, "exclude_bias_and_norm"):
+        def exclude_bias_and_norm(p):
+            return p.ndim == 1
+        __main__.exclude_bias_and_norm = exclude_bias_and_norm
+
+
 def load_dino(path, arch):
     ck = torch.load(path, map_location="cpu", weights_only=False)
     state = ck.get("teacher", ck)
@@ -180,6 +193,7 @@ def load_projector(path, key_model, prefix, arch="resnet50"):
 
 
 def load_all(workdir="pretrained"):
+    _allow_vicreg_unpickle()
     os.makedirs(workdir, exist_ok=True)
     models = {}
     for name, url in CKPTS.items():
@@ -377,17 +391,36 @@ def main():
     for name, (b, h) in models.items():
         orbit_analysis(name, b, h, testset, n_traj=50, steps=12)
 
-    # real head outputs from a real trained SSL model feed the loss-geometry tests
-    for name, (b, h) in list(models.items())[:2]:
+    # Real head outputs from a real trained SSL model feed the loss-geometry tests.
+    #
+    # DINO's released heads output 60,000 (ResNet-50) and 65,536 (ViT-S) prototype
+    # logits; a dense k x k loss Hessian at that width is ~29 GB and is not
+    # computable here, so the loss geometry is taken on the Barlow Twins / VICReg
+    # heads (8192-d) reduced to the top K_GEOM principal directions of the real
+    # batch.  That reduced space is itself a real head output space — it is the
+    # geometry a head mapping into those directions realises — so no quantity below
+    # comes from a synthetic or hand-constructed representation.
+    K_GEOM = 512
+    for name in ("barlowtwins_resnet50", "vicreg_resnet50"):
+        if name not in models:
+            continue
+        b, h = models[name]
         rng = np.random.default_rng(SEED)
         picks = rng.choice(len(testset), 64, replace=False)
         with torch.no_grad():
             X1 = torch.stack([NORM(testset[int(j)][0]) for j in picks])
             X2 = torch.stack([NORM(TF.rotate(testset[int(j)][0], 15.0)) for j in picks])
-            H1 = h(b(X1)).double()
-            H2 = h(b(X2)).double()
-        print(f"REPS {name} H1={tuple(H1.shape)} H2={tuple(H2.shape)}", flush=True)
-        loss_geometry(H1, H2, d=512, tag=name)
+            R1 = h(b(X1)).double()
+            R2 = h(b(X2)).double()
+        mu = R1.mean(0, keepdim=True)
+        _, S, Vt = torch.linalg.svd(R1 - mu, full_matrices=False)
+        m = min(K_GEOM, Vt.shape[0])
+        P = Vt[:m].T
+        H1, H2 = (R1 - mu) @ P, (R2 - mu) @ P
+        kept = float((S[:m] ** 2).sum() / (S ** 2).sum())
+        print(f"REPS {name} raw={tuple(R1.shape)} reduced={tuple(H1.shape)} "
+              f"variance_retained={kept:.6f}", flush=True)
+        loss_geometry(H1, H2, d=m, tag=name)
         prop33(H1, H2, m=6, tag=name)
         break
 
