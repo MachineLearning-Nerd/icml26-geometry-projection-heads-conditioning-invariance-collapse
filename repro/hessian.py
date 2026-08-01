@@ -48,19 +48,34 @@ def negcos_loss(c):
     return f
 
 
-def mse_loss_normalised(c):
-    """PSD-by-construction alternative: l(h) = 0.25 * || h/|h| - c/|c| ||^2.
+def mse_loss(c):
+    """The paper's stated PSD case: a standard MSE objective, l(h) = 0.5 ||h - c||^2.
 
-    Identical to `negcos_loss` up to an additive constant on the unit sphere, but its
-    Hessian in the *ambient* h coordinates differs.  Used as the assumption control for
-    the paper's "the intrinsic Hessian of the loss is PSD" premise.
+    Its ambient Hessian is exactly the identity, so grad_h^2 L is PSD by construction and
+    Theorem 4.1's premise "In standard MSE-based objectives, the intrinsic Hessian of the
+    loss is PSD" holds verbatim.  This is the setting in which the theorem's part-1
+    conclusion (H_eff PSD for a linear head) is actually entitled to hold.
     """
-    cn = c / (c.norm() + 1e-12)
+    cn = c.detach()
 
     def f(h):
-        return 0.25 * torch.sum((h / (h.norm() + 1e-12) - cn) ** 2)
+        return 0.5 * torch.sum((h - cn) ** 2)
 
     return f
+
+
+def tangential(H_L, h):
+    """Restriction of the loss Hessian to the tangent space of the sphere at h.
+
+    The SimSiam objective is scale-invariant in h, so the radial direction is a flat
+    direction of the *function* but contributes genuine negative curvature to the
+    ambient Hessian through the normalisation.  The intrinsic loss geometry the paper
+    reasons about lives on the sphere, and that is the block computed here:
+    P H_L P with P = I - hh^T/||h||^2.
+    """
+    hn = h / (h.norm() + 1e-300)
+    P = torch.eye(h.shape[0], dtype=h.dtype) - torch.outer(hn, hn)
+    return P @ H_L @ P, P
 
 
 def decompose(projector, predictor, z, c, loss_factory=negcos_loss):
@@ -89,7 +104,10 @@ def decompose(projector, predictor, z, c, loss_factory=negcos_loss):
     H_L = hessian(loss)(h)                        # (k, k)
     G = J.T @ H_L @ J                             # pullback metric
     M = H_eff - G                                 # interaction term
-    return {"H_eff": H_eff, "G": G, "M": M, "H_L": H_L, "J": J}
+    H_L_tan, _ = tangential(H_L, h)
+    G_tan = J.T @ H_L_tan @ J
+    return {"H_eff": H_eff, "G": G, "M": M, "H_L": H_L, "J": J,
+            "H_L_tan": H_L_tan, "G_tan": G_tan, "H_eff_tan": G_tan + M}
 
 
 def spectrum(A):
@@ -106,17 +124,19 @@ def summarise(parts, tol):
     is below -tol.  It is set from a measured round-off scale, never tuned per run.
     """
     out = {}
-    for name in ("H_eff", "G", "M"):
+    for name in ("H_eff", "G", "M", "H_eff_tan", "G_tan", "H_L", "H_L_tan"):
+        if name not in parts:
+            continue
         ev = spectrum(parts[name])
         scale = float(ev.abs().max())
         out[f"{name}_lambda_min"] = float(ev[0])
         out[f"{name}_lambda_max"] = float(ev[-1])
         out[f"{name}_n_neg"] = int((ev < -tol * max(scale, 1e-30)).sum())
         out[f"{name}_fro"] = float(torch.linalg.norm(parts[name]))
-    ev = spectrum(parts["H_L"])
-    out["H_L_lambda_min"] = float(ev[0])
-    out["H_L_lambda_max"] = float(ev[-1])
     out["M_over_Heff_fro"] = out["M_fro"] / (out["H_eff_fro"] + 1e-300)
+    out["H_L_is_psd"] = bool(out["H_L_lambda_min"] >= -tol * max(abs(out["H_L_lambda_max"]), 1e-30))
+    out["H_L_tan_is_psd"] = bool(
+        out["H_L_tan_lambda_min"] >= -1e-8 * max(abs(out["H_L_tan_lambda_max"]), 1e-30))
     return out
 
 

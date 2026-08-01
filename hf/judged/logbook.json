@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "title": "Repro - The Geometry of Projection Heads: Conditioning, Invariance, and Collapse",
+  "emoji": "🎯",
+  "space_id": "DineshAI/y4uR1LFClc",
+  "paper": null,
+  "tags": [
+    "icml2026-repro",
+    "paper-y4uR1LFClc"
+  ],
+  "updated_at": "2026-08-01T02:20:11+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Repro - The Geometry of Projection Heads: Conditioning, Invariance, and Collapse",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "overview",
+        "title": "Overview",
+        "file": "pages/overview/page.md",
+        "children": []
+      },
+      {
+        "slug": "claims",
+        "title": "Claims",
+        "file": "pages/claims/page.md",
+        "children": []
+      },
+      {
+        "slug": "evidence",
+        "title": "Evidence",
+        "file": "pages/evidence/page.md",
+        "children": []
+      },
+      {
+        "slug": "verification-run",
+        "title": "Verification run",
+        "file": "pages/verification-run/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 1359,
+  "revision": "1785550811918420931"
+}

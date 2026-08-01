@@ -154,6 +154,7 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
 
     for epoch in range(epochs):
         ep_exact, ep_power, ep_M, ep_G, ep_HL = [], [], [], [], []
+        ep_exact_tan, ep_exact_mse, ep_Mrel, ep_Mrel_mse, ep_HLtan = [], [], [], [], []
         ep_var, ep_cond = [], []
         for i, ((x1, x2), _) in enumerate(loader):
             if max_steps_per_epoch is not None and i >= max_steps_per_epoch:
@@ -170,14 +171,26 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
                 zs = z1.detach()[:hess_samples]
                 cs = p2.detach()[:hess_samples]
                 for s in range(zs.shape[0]):
-                    parts = HZ.decompose(projector, predictor, zs[s], cs[s])
-                    summ = HZ.summarise(parts, EIG_TOL)
-                    ep_exact.append(summ["H_eff_lambda_min"])
-                    ep_G.append(summ["G_lambda_min"])
-                    ep_M.append(summ["M_lambda_min"])
-                    ep_HL.append(summ["H_L_lambda_min"])
+                    # (a) the objective actually optimised, in ambient coordinates
+                    cos_parts = HZ.decompose(projector, predictor, zs[s], cs[s],
+                                             HZ.negcos_loss)
+                    cos_summ = HZ.summarise(cos_parts, EIG_TOL)
+                    # (c) the paper's stated PSD case: a standard MSE objective
+                    mse_parts = HZ.decompose(projector, predictor, zs[s], cs[s],
+                                             HZ.mse_loss)
+                    mse_summ = HZ.summarise(mse_parts, EIG_TOL)
+                    ep_exact.append(cos_summ["H_eff_lambda_min"])
+                    ep_exact_tan.append(cos_summ["H_eff_tan_lambda_min"])
+                    ep_exact_mse.append(mse_summ["H_eff_lambda_min"])
+                    ep_G.append(cos_summ["G_lambda_min"])
+                    ep_M.append(cos_summ["M_lambda_min"])
+                    ep_Mrel.append(cos_summ["M_over_Heff_fro"])
+                    ep_Mrel_mse.append(mse_summ["M_over_Heff_fro"])
+                    ep_HL.append(cos_summ["H_L_lambda_min"])
+                    ep_HLtan.append(cos_summ["H_L_tan_lambda_min"])
                     if epoch == 0 and i == 0 and s == 0:
-                        print("SAMPLE0 " + json.dumps(summ), flush=True)
+                        print("SAMPLE0_COS " + json.dumps(cos_summ), flush=True)
+                        print("SAMPLE0_MSE " + json.dumps(mse_summ), flush=True)
 
             opt.zero_grad()
             loss.backward()
@@ -195,13 +208,25 @@ def run(activation, init, epochs, batch_size=256, seed=0, lr=0.05,
             "epoch": epoch,
             "activation": activation,
             "init": init,
+            # (a) ambient cosine objective — what Figure 3 actually optimises
             "exact_lambda_min_mean": float(np.mean(ep_exact)),
             "exact_lambda_min_min": float(np.min(ep_exact)),
             "exact_frac_neg": float(np.mean(np.array(ep_exact) < 0.0)),
+            # (b) same objective restricted to the sphere's tangent space
+            "tan_lambda_min_mean": float(np.mean(ep_exact_tan)),
+            "tan_lambda_min_min": float(np.min(ep_exact_tan)),
+            "tan_frac_neg": float(np.mean(np.array(ep_exact_tan) < 0.0)),
+            # (c) the paper's stated PSD premise: standard MSE objective
+            "mse_lambda_min_mean": float(np.mean(ep_exact_mse)),
+            "mse_lambda_min_min": float(np.min(ep_exact_mse)),
+            "mse_frac_neg": float(np.mean(np.array(ep_exact_mse) < 0.0)),
+            "M_over_Heff_cos_mean": float(np.mean(ep_Mrel)),
+            "M_over_Heff_mse_mean": float(np.mean(ep_Mrel_mse)),
             "power_lambda_min_mean": float(np.mean(ep_power)),
             "G_lambda_min_min": float(np.min(ep_G)),
             "M_lambda_min_min": float(np.min(ep_M)),
             "H_L_lambda_min_min": float(np.min(ep_HL)),
+            "H_L_tan_lambda_min_min": float(np.min(ep_HLtan)),
             "variance": float(np.mean(ep_var)),
             "cond_number": float(np.mean(ep_cond)),
             "elapsed_s": round(time.perf_counter() - t0, 1),
