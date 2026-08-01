@@ -29,15 +29,30 @@ Runtimes and outcomes are recorded in `.openresearch/artifacts/` as each job lan
 
 ## Budget and harvest policy
 
-`cpu-upgrade` bills at roughly $0.03 per hour, so even if every job above ran to its
-timeout the total is on the order of **$3**. The binding constraint is wall-clock, not
-money, so the long runs are **harvested early rather than run to timeout**:
+**Hard cap: no job may be launched with an estimated runtime over 1 hour, and any of
+this campaign's jobs that overruns an hour is cancelled.** Set 2026-08-01, after the
+first round of long runs was terminated mid-flight by a platform credit cutoff having
+banked 0-1 epochs each. Work that does not fit an hour is split until it does.
 
-| Node | Timeout | Harvest point | Why that is enough |
-| --- | --- | --- | --- |
-| collapse ×5 | 14h | ~10 epochs (~6h) | the sign structure of lambda_min and the size of the interaction term M are per-state quantities, reported every epoch; more epochs add trajectory length, not a different answer |
-| orbits | 26h | whatever epoch is reached at the ~10-12h mark | orbit geometry is evaluated every 5 epochs, and the paper's exact 21.85x is already verified against the released arrays — this run is independent corroboration |
-| pretrained | 3h | run to completion | it is short |
+Two consequences that are easy to get wrong:
+
+- **The data fetch counts against the hour.** Staging CIFAR-10 from `cs.toronto.edu`
+  inside a job measured **2106 s (35 min)** at ~80-110 kB/s — more than half the budget
+  before a single gradient step. Any job needing CIFAR-10 must fetch from a fast mirror
+  under the same MD5 gate (`c58f30108f718f92721af3b95e74349a`) or it cannot fit.
+- **Only this campaign's jobs are ever cancelled.** The `DineshAI` account is shared:
+  on 2026-08-01, 28 unrelated jobs from another agent's mixture-of-experts sweep were
+  running under it. Confirm ownership from a job's own log before cancelling it.
+
+Re-scoped plan under the cap (each row is one job, all `cpu-upgrade`):
+
+| Node | Est. runtime | How it was made to fit |
+| --- | --- | --- |
+| pretrained ×4 (one per checkpoint) | ~25-40 min | was one ~3h job over 4 checkpoints; splitting per checkpoint also removes the risk that one slow model starves the rest |
+| geometry certificate (Claims 2, 3) | ~10 min | symbolic; no checkpoint download, no training. Was buried at the end of the pretrained job, which is why it never ran — it is now its own node and cannot be starved |
+| losses ×1 (Claim 5 part A) | ~15 min | eight objectives, analytic Hessians only |
+| collapse ×5, epoch-chunked | ~45 min each | `max_steps_per_epoch` bounds the tracked steps, and a chunk resumes nothing — each job reports its own states, which is sound because lambda_min and M are **per-state** quantities, not trajectory-dependent |
+| orbits | ~50 min | fewer epochs, evaluated at the epochs reached; the exact 21.85x is already banked from the released arrays, so this stays corroboration |
 
 Every harvested run states, on its claim page, exactly how many of the paper's epochs
 were completed and why the run was stopped. A shortened run is reported as a shortened
