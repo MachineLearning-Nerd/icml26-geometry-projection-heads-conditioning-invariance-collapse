@@ -26,3 +26,19 @@ git ref; the ref alone determines the experiment, via `repro/config.py`.
 | `6a6d7cca6b79c09949c1e034` | `exp/orbits@b2e5cee` | orbits | 26h | SimCLR pretraining + orbit geometry |
 
 Runtimes and outcomes are recorded in `.openresearch/artifacts/` as each job lands.
+
+## Budget and harvest policy
+
+`cpu-upgrade` bills at roughly $0.03 per hour, so even if every job above ran to its
+timeout the total is on the order of **$3**. The binding constraint is wall-clock, not
+money, so the long runs are **harvested early rather than run to timeout**:
+
+| Node | Timeout | Harvest point | Why that is enough |
+| --- | --- | --- | --- |
+| collapse ×5 | 14h | ~10 epochs (~6h) | the sign structure of lambda_min and the size of the interaction term M are per-state quantities, reported every epoch; more epochs add trajectory length, not a different answer |
+| orbits | 26h | whatever epoch is reached at the ~10-12h mark | orbit geometry is evaluated every 5 epochs, and the paper's exact 21.85x is already verified against the released arrays — this run is independent corroboration |
+| pretrained | 3h | run to completion | it is short |
+
+Every harvested run states, on its claim page, exactly how many of the paper's epochs
+were completed and why the run was stopped. A shortened run is reported as a shortened
+run; it is never described as the paper's full budget.
