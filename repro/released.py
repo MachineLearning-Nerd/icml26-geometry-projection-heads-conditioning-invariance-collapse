@@ -214,6 +214,15 @@ def claim4(hdir):
 # Claim 1
 # --------------------------------------------------------------------------
 def claim1(roots):
+    """Representation-variance trajectories per activation.
+
+    The released files use two key conventions: a bare activation name, and the full
+    ablation name `<act>_bn_<True|False>_lr_<base|large|small>`.  Both are handled, and
+    the BatchNorm / learning-rate ablation is reported rather than collapsed away,
+    because Section 4.2's ReLU discussion is explicitly about the no-BatchNorm,
+    small-step ("continuous-like gradient flow") regime — a ReLU run *with* BatchNorm
+    or a large step size is outside the scope of the claim being tested.
+    """
     print("\n=== CLAIM 1 :: Theorem 4.1 across activations (released collapse runs)", flush=True)
     out = {}
     for root in roots:
@@ -221,13 +230,18 @@ def claim1(roots):
         if not os.path.exists(p):
             continue
         d = np.load(p, allow_pickle=True).item()
-        for act in ("linear", "relu", "gelu", "swish"):
-            if act not in d:
+        print(f"KEYS {root}: {sorted(d)}", flush=True)
+        for act in sorted(d):
+            entry = d[act]
+            if not isinstance(entry, dict) or "raw" not in entry:
                 continue
-            raw = np.asarray(d[act]["raw"])          # (seeds, epochs) representation variance
+            raw = np.asarray(entry["raw"])           # (seeds, epochs) representation variance
             rec = {
                 "setting": root.replace("authors/results/", ""),
-                "activation": act,
+                "run": act,
+                "activation": act.split("_")[0],
+                "batchnorm": ("bn_True" in act),
+                "lr_scale": (act.split("_lr_")[1] if "_lr_" in act else "base"),
                 "seeds": int(raw.shape[0]),
                 "epochs": int(raw.shape[1]),
                 "var_first_per_seed": raw[:, 0].tolist(),
@@ -241,6 +255,47 @@ def claim1(roots):
     return out
 
 
+def assumptions(root):
+    """Numerical audit of the assumptions Theorem 4.1 rests on.
+
+    Assumption 7 (timescale separation): the head must adapt faster than the backbone,
+    measured as the ratio of relative update magnitudes eta*||grad w|| / ||w||.  The
+    paper's Table 3 reports this ratio per activation with and without BatchNorm; it is
+    recomputed here from the released per-seed arrays.
+
+    Assumption 6 (nonvanishing residual gradient): ||grad_h L|| must stay bounded away
+    from zero near the collapsed state, otherwise the interaction term M = sum_i
+    [grad_h L]_i grad^2 h_i is zero for every head and Theorem 4.1 says nothing.
+    """
+    print("\n=== ASSUMPTION AUDIT (Assumptions 6 and 7)", flush=True)
+    p = os.path.join(root, "collapse_results.npy")
+    if not os.path.exists(p):
+        return {}
+    d = np.load(p, allow_pickle=True).item()
+    out = {}
+    for run in sorted(d):
+        e = d[run]
+        if not isinstance(e, dict):
+            continue
+        rec = {"run": run}
+        if "proj_update_rel_mean" in e and "backbone_update_rel_mean" in e:
+            pr = np.asarray(e["proj_update_rel_mean"], float)
+            br = np.asarray(e["backbone_update_rel_mean"], float)
+            ok = br > 0
+            rec["timescale_ratio_mean"] = float(np.mean(pr[ok] / br[ok]))
+            rec["timescale_ratio_median"] = float(np.median(pr[ok] / br[ok]))
+            rec["head_adapts_faster"] = bool(rec["timescale_ratio_mean"] > 1.0)
+        if "proj_update_norms_unnormalized_mean" in e:
+            gn = np.asarray(e["proj_update_norms_unnormalized_mean"], float)
+            rec["residual_grad_proxy_min"] = float(gn.min())
+            rec["residual_grad_proxy_mean"] = float(gn.mean())
+            rec["residual_grad_bounded_away_from_zero"] = bool(gn.min() > 0)
+        if len(rec) > 1:
+            out[run] = rec
+            print("ASSUMPTION " + json.dumps(rec), flush=True)
+    return out
+
+
 def main():
     sha = clone()
     print(f"PINNED_AUTHORS_SHA {sha}", flush=True)
@@ -250,3 +305,4 @@ def main():
     claim1(["authors/results/cifar10/resnet18",
             "authors/results/cifar100/resnet18",
             "authors/results/cifar10/vit_tiny"])
+    assumptions("authors/results/cifar10/resnet18")
