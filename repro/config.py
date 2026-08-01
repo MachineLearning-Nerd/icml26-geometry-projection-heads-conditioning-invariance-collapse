@@ -11,11 +11,11 @@ here may be overridden by an environment variable or a command-line flag.
 #   "released"   independent re-analysis of the authors' released full-scale arrays
 #   "orbits"     Claim 6 — SimCLR pretraining then augmentation-orbit geometry
 #   "pretrained" Claims 2, 3 & 5 — geometry of official SSL checkpoints with heads
-STAGE = "smoke"
+STAGE = "collapse"
 
 # --- stage "collapse" -------------------------------------------------------
 COLLAPSE = {
-    "activation": "swish",   # linear | relu | gelu | swish
+    "activation": "linear",   # linear | relu | gelu | swish
     "init": "collapsed",     # collapsed | normal
     "epochs": 15,
     "batch_size": 256,
