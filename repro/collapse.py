@@ -30,6 +30,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
+from repro import data
 from repro import hessian as HZ
 from repro.models import ProjectionHead, ResNetBackbone
 
@@ -54,6 +55,7 @@ def loaders(batch_size, seed, root="./data"):
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
     ])
+    data.stage(root)
     ds = torchvision.datasets.CIFAR10(root=root, train=True,
                                       transform=TwoCropTransform(transform), download=True)
     g = torch.Generator()
