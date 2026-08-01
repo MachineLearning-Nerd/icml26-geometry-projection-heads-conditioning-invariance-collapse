@@ -1,0 +1,111 @@
+{
+ "schema_version": 1,
+ "title": "Repro - The Geometry of Projection Heads: Conditioning, Invariance, and Collapse",
+ "emoji": "\ud83c\udfaf",
+ "space_id": "DineshAI/y4uR1LFClc",
+ "paper": null,
+ "tags": [
+  "icml2026-repro",
+  "paper-y4uR1LFClc"
+ ],
+ "updated_at": "2026-08-01T00:00:00+00:00",
+ "root": {
+  "slug": "index",
+  "title": "Repro - The Geometry of Projection Heads: Conditioning, Invariance, and Collapse",
+  "file": "pages/index.md",
+  "children": [
+   {
+    "slug": "current-verification",
+    "title": "Current verification (start here)",
+    "file": "pages/current-verification/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-1-theorem-4-1",
+    "title": "Claim 1 - Theorem 4.1 (BLOCKED)",
+    "file": "pages/claim-1-theorem-4-1/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-2-theorem-3-1",
+    "title": "Claim 2 - Theorem 3.1 (BLOCKED)",
+    "file": "pages/claim-2-theorem-3-1/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-3-proposition-3-3",
+    "title": "Claim 3 - Proposition 3.3 (BLOCKED)",
+    "file": "pages/claim-3-proposition-3-3/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-4-figure-3",
+    "title": "Claim 4 - Figure 3 Hessian spectrum (VERIFIED)",
+    "file": "pages/claim-4-figure-3/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-5-section-6-generality",
+    "title": "Claim 5 - Section 6 generality (BLOCKED)",
+    "file": "pages/claim-5-section-6-generality/page.md",
+    "children": []
+   },
+   {
+    "slug": "claim-6-orbit-compression",
+    "title": "Claim 6 - Figure 5 orbit compression (VERIFIED)",
+    "file": "pages/claim-6-orbit-compression/page.md",
+    "children": []
+   },
+   {
+    "slug": "assumptions-and-controls",
+    "title": "Assumptions and negative controls",
+    "file": "pages/assumptions-and-controls/page.md",
+    "children": []
+   },
+   {
+    "slug": "limitations-and-deviations",
+    "title": "Limitations and deviations",
+    "file": "pages/limitations-and-deviations/page.md",
+    "children": []
+   },
+   {
+    "slug": "visibility-matrix",
+    "title": "Visibility matrix",
+    "file": "pages/visibility-matrix/page.md",
+    "children": []
+   },
+   {
+    "slug": "overview",
+    "title": "Overview",
+    "file": "pages/overview/page.md",
+    "children": []
+   },
+   {
+    "slug": "claims",
+    "title": "Claims",
+    "file": "pages/claims/page.md",
+    "children": []
+   },
+   {
+    "slug": "evidence",
+    "title": "Evidence",
+    "file": "pages/evidence/page.md",
+    "children": []
+   },
+   {
+    "slug": "verification-run",
+    "title": "Historical rejected baseline (toy 4x4 verification run)",
+    "file": "pages/verification-run/page.md",
+    "children": []
+   },
+   {
+    "slug": "conclusion",
+    "title": "Conclusion",
+    "file": "pages/conclusion/page.md",
+    "children": []
+   }
+  ]
+ },
+ "agent_view_tokens": 1359,
+ "revision": "1785550811918420931"
+}

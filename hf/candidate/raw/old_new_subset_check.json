@@ -1,0 +1,30 @@
+{
+ "added": [
+  "pages/assumptions-and-controls/page.md",
+  "pages/claim-1-theorem-4-1/page.md",
+  "pages/claim-2-theorem-3-1/page.md",
+  "pages/claim-3-proposition-3-3/page.md",
+  "pages/claim-4-figure-3/page.md",
+  "pages/claim-5-section-6-generality/page.md",
+  "pages/claim-6-orbit-compression/page.md",
+  "pages/current-verification/page.md",
+  "pages/limitations-and-deviations/page.md",
+  "pages/visibility-matrix/page.md",
+  "raw/assumptions_audit.csv",
+  "raw/claim4_released_hessian_runs.csv",
+  "raw/claim5_pretrained_orbit_geometry.csv",
+  "raw/claim6_orbit_compression.json",
+  "raw/claim6_per_orbit_spread.csv"
+ ],
+ "candidate_files": 32,
+ "is_superset": true,
+ "judged_files": 17,
+ "old_files_modified": [
+  "logbook.json",
+  "pages/index.md",
+  "pages/verification-run/page.md"
+ ],
+ "old_not_in_new": [],
+ "rejected_baseline_banner_bytes": 947,
+ "rejected_baseline_bytes_preserved_verbatim": true
+}
