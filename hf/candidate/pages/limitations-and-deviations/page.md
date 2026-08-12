@@ -43,11 +43,16 @@ their partial output is published as partial:
 - the five Hessian-tracking runs (Claims 1 and 4) — 0 to 1 epochs of a planned 15;
 - the independent SimCLR orbit run (Claim 6 corroboration) — 3 epochs of a planned 50,
   which is why the independent orbit section reports the untrained baseline only;
-- the pretrained-checkpoint analysis (Claims 2, 3 and 5) — 9 of 16 orbit records, and
-  the symbolic certificate that Claim 3's universal quantifier depends on never ran.
+- the first pretrained-checkpoint job — 9 of 16 orbit records before termination;
+  later split nodes completed the scoped checkpoint analysis;
+- the original geometry job — its symbolic certificate was moved to a separate local
+  CPU node after the long job was terminated.
 
-Claims 2, 3 and 5 are marked **BLOCKED** for exactly this reason. They are not marked
-verified on partial evidence.
+The current candidate pages now close Claims 2, 3 and 5 with the evidence that was
+actually produced: an exact symbolic whitening certificate, two qualifying real
+positive-definite curvature cases with flat controls, eight named (seven distinct)
+real objectives, and four official checkpoints. The earlier partial jobs remain
+described as partial; they are not silently upgraded to full-budget replication.
 
 ## Shortened training budgets
 
@@ -127,7 +132,7 @@ this is a scoped instance rather than a statement about the ambient geometry.
 
 | | |
 | --- | --- |
-| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse](https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse) |
+| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse](https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse) |
 | Fixed command (identical on every node) | `uv run --frozen repro/run_all.py` |
 | Environment | pinned by `pyproject.toml` + `uv.lock`; torch/torchvision from the CPU-only wheel index |
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |

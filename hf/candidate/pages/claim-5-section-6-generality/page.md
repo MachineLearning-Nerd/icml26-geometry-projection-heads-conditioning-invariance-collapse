@@ -17,8 +17,9 @@ are well defined and hold for each objective.
 finite domain** — eight named methods, four per family. A finite domain admits exhaustive
 verification, so nothing symbolic is needed and sampling is not an excuse: full credit
 requires all eight, in both families, not a representative subset. That is the standard
-this page is held to, and the reason it reads BLOCKED while part of the domain is
-unmeasured.
+this page is held to. The current evidence covers all eight named methods as real
+losses (seven distinct functions because InfoNCE and SimCLR are identical by
+construction) and all four official checkpoints.
 
 It is **not** a claim that every method
 produces the same numbers, and in fact the numbers below differ sharply between families,
@@ -103,10 +104,11 @@ across all four checkpoints would have been wrong.
 
 - [`raw/claim5_pretrained_orbit_geometry.csv`](raw/claim5_pretrained_orbit_geometry.csv) — every checkpoint x orbit row
 
-The companion file of the eight objectives' real loss Hessians was not produced: that
-stage of the job never ran, for the reason given under
-[Limitations](#/limitations-and-deviations). It is not linked here rather than being
-linked as a file that does not exist.
+The companion evidence for the eight objectives' real loss Hessians is recorded on
+[Claim 2](#/claim-2-theorem-3-1), including the per-objective ranks and isotropy
+errors. The first long job was partial, but the later bounded loss node completed this
+stage; the historical interruption is retained under
+[Limitations](#/limitations-and-deviations).
 
 ## Verifier
 
@@ -119,7 +121,7 @@ load.
 
 | | |
 | --- | --- |
-| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse](https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse) |
+| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse](https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse) |
 | Fixed command (identical on every node) | `uv run --frozen repro/run_all.py` |
 | Environment | pinned by `pyproject.toml` + `uv.lock`; torch/torchvision from the CPU-only wheel index |
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |

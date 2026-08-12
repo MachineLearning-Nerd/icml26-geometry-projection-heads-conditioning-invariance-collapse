@@ -20,7 +20,7 @@ import subprocess
 import sys
 
 REPO = ("https://github.com/MachineLearning-Nerd/"
-        "icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse")
+        "icml26-geometry-projection-heads-conditioning-invariance-collapse")
 
 ref = sys.argv[1] if len(sys.argv) > 1 else "main"
 subprocess.run(["git", "clone", "--quiet", REPO, "repo"], check=True)

@@ -34,7 +34,7 @@ JUDGED = os.path.join(ROOT, "hf", "judged")
 OUT = os.path.join(ROOT, "hf", "candidate")
 
 REPO = ("https://github.com/MachineLearning-Nerd/"
-        "icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse")
+        "icml26-geometry-projection-heads-conditioning-invariance-collapse")
 AUTHORS_REPO = "https://github.com/farischaudhry/projection-head-geometry"
 PAPER_SHA256 = "c344481c6fa2c59b6439f41d2053c737d92e11da1e4a7890941c776188ade7a4"
 JUDGED_REV = "099048293db504eb467f72c37f7bfd371dadcfcb"

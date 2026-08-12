@@ -6,7 +6,7 @@ environment, and links every claim page, raw data file and control.
 
 arXiv [2605.17180](https://arxiv.org/abs/2605.17180) ·
 OpenReview [y4uR1LFClc](https://openreview.net/forum?id=y4uR1LFClc) ·
-reproduction repository [https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse](https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse)
+reproduction repository [https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse](https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse)
 
 All research compute ran on CPU — Hugging Face `cpu-upgrade` (8 vCPU, measured) for the
 training and pretrained-checkpoint runs, and an 8-core local CPU for the symbolic

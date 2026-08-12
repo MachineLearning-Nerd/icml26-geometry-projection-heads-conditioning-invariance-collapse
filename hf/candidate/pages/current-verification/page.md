@@ -60,7 +60,7 @@ matrix. The evidence now comes from three independent sources:
 ## How to reproduce any of it
 
 ```bash
-git clone https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse repo
+git clone https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse repo
 cd repo && git checkout <node ref from the table below>
 uv run --frozen repro/run_all.py
 ```
@@ -136,7 +136,7 @@ deterministic at fixed seed.
 | Node | Est. runtime | How it was made to fit |
 | --- | --- | --- |
 | pretrained ×4 (one per checkpoint) | ~25-40 min | was one ~3h job over 4 checkpoints; splitting per checkpoint also removes the risk that one slow model starves the rest |
-| geometry certificate (Claims 2, 3) | ~10 min | symbolic; no checkpoint download, no training. Was buried at the end of the pretrained job, which is why it never ran — it is now its own node and cannot be starved |
+| geometry certificate (Claims 2, 3) | ~10 min | symbolic; no checkpoint download, no training. It now runs as an independent node, and its exact certificate is recorded on the Claim 2 and Claim 3 pages |
 | losses ×1 (Claim 5 part A) | ~15 min | eight objectives, analytic Hessians only |
 | collapse ×5, epoch-chunked | ~45 min each | `max_steps_per_epoch` bounds the tracked steps, and a chunk resumes nothing — each job reports its own states, which is sound because lambda_min and M are **per-state** quantities, not trajectory-dependent |
 | orbits | ~50 min | fewer epochs, evaluated at the epochs reached; the exact 21.85x is already banked from the released arrays, so this stays corroboration |
@@ -146,7 +146,7 @@ deterministic at fixed seed.
 
 | | |
 | --- | --- |
-| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse](https://github.com/MachineLearning-Nerd/icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse) |
+| Reproduction repository | [https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse](https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse) |
 | Fixed command (identical on every node) | `uv run --frozen repro/run_all.py` |
 | Environment | pinned by `pyproject.toml` + `uv.lock`; torch/torchvision from the CPU-only wheel index |
 | Compute | Hugging Face `cpu-upgrade`, measured 8 vCPU (cgroup) on AMD EPYC 7R13; **no GPU anywhere** — the runner asserts `torch.cuda.is_available() is False` and aborts otherwise |
