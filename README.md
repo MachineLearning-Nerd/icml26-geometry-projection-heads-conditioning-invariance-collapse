@@ -27,6 +27,10 @@ page. The current candidate pages replace those checks with exact Hessians, real
 trained networks, released full-scale arrays, official checkpoints, and explicit
 assumption audits.
 
+Machine-readable overall verdict: `SCOPED_CLAIMS_1_TO_6_VERIFIED_WITH_EXPLICIT_BUDGET_AND_ASSUMPTION_BOUNDARIES`.
+
+Publication boundary: `NO_FULL_BUDGET_INDEPENDENT_TRAINING_RELEASED_ARRAY_AND_CHECKPOINT_DEPENDENCIES`; `publication_allowed=false`, `score_claim=false`, and `official_author_endorsement=false`.
+
 ## What the paper is doing
 
 The paper treats a projection head in self-supervised learning as a trainable
@@ -68,6 +72,9 @@ The central evidence path is:
 Detailed tables, raw-file links, negative controls, and assumptions are in the
 candidate logbook pages under hf/candidate/pages. Start at
 [Current verification](https://huggingface.co/spaces/DineshAI/y4uR1LFClc/tree/main/pages/current-verification).
+The repository-level summary is in [STATUS.md](STATUS.md), the claim ledger is in
+[CLAIM_EVIDENCE.md](CLAIM_EVIDENCE.md), and the machine-readable outcomes are in
+[reproduction_verdicts.json](reproduction_verdicts.json).
 
 ## Repository layout
 
@@ -147,11 +154,15 @@ page.
 Please cite the paper when using this reproduction, its analysis, or its released
 artifacts.
 
+The same citation is available as [CITATION.cff](CITATION.cff).
+
 ## Thank you
 
 Thank you to Faris Chaudhry for making the paper, source material, implementation,
 and released arrays available. Those public artifacts make it possible to audit the
 claims at the level of equations, code, and numerical evidence.
+
+See [AUTHOR_THANK_YOU.md](AUTHOR_THANK_YOU.md) for the standalone acknowledgment.
 
 ## Attribution and repository history
 
@@ -159,7 +170,7 @@ claims at the level of equations, code, and numerical evidence.
 - Original repository: icml26-repro-y4uR1LFClc-the-geometry-of-projection-heads-conditioning-invariance-and-collapse
 - OpenReview/forum identifier: y4uR1LFClc
 - Approved commit author and committer identity:
-  MachineLearning-Nerd <37579156+MachineLearning-Nerd@users.noreply.github.com>
+  MachineLearning-Nerd <MachineLearning-Nerd@users.noreply.github.com>
 
 The original name and historical judged bytes are retained in the audit trail; the
 public repository name and active branch names are cleaned for readability.

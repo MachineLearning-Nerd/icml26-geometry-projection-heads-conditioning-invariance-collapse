@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "repository": "MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse",
+  "paper": {
+    "title": "The Geometry of Projection Heads: Conditioning, Invariance, and Collapse",
+    "authors": ["Faris Chaudhry"],
+    "arxiv": "2605.17180",
+    "openreview": "y4uR1LFClc"
+  },
+  "overall_verdict": "SCOPED_CLAIMS_1_TO_6_VERIFIED_WITH_EXPLICIT_BUDGET_AND_ASSUMPTION_BOUNDARIES",
+  "publication_boundary": "NO_FULL_BUDGET_INDEPENDENT_TRAINING_RELEASED_ARRAY_AND_CHECKPOINT_DEPENDENCIES",
+  "publication_allowed": false,
+  "score_claim": false,
+  "official_author_endorsement": false,
+  "claims": [
+    {"id": "C1", "status": "verified_scoped", "paper_object": "Theorem 4.1", "evidence": ["repro/hessian.py", "repro/collapse.py", "repro/released.py", "hf/candidate/pages/claim-1-theorem-4-1/page.md"], "boundary": "MSE PSD premise; exact real-state decomposition; shortened independent training and released-array dependence are disclosed."},
+    {"id": "C2", "status": "verified_scoped", "paper_object": "Theorem 3.1", "evidence": ["repro/geometry.py", "hf/candidate/raw/claim2_theorem31_real_loss_hessians.csv", "hf/candidate/pages/claim-2-theorem-3-1/page.md"], "boundary": "Symbolic universal certificate plus real Hessian instantiations; rank and PSD cases are recorded."},
+    {"id": "C3", "status": "verified_scoped", "paper_object": "Proposition 3.3", "evidence": ["repro/geometry.py", "repro/pretrained.py", "hf/candidate/raw/claim3_curvature.csv", "hf/candidate/pages/claim-3-proposition-3-3/page.md"], "boundary": "Two qualifying positive-definite geometries; indefinite and fourth-derivative failures are excluded explicitly."},
+    {"id": "C4", "status": "verified_scoped", "paper_object": "Figure 3", "evidence": ["repro/released.py", "repro/collapse.py", "hf/candidate/raw/claim4_released_hessian_runs.csv", "hf/candidate/pages/claim-4-figure-3/page.md"], "boundary": "Released 100-epoch arrays reproduce the three correlations; the float32 estimator resolution caveat remains."},
+    {"id": "C5", "status": "verified_scoped", "paper_object": "Section 6", "evidence": ["repro/losses.py", "repro/pretrained.py", "repro/geometry.py", "hf/candidate/raw/claim5_pretrained_orbit_geometry.csv", "hf/candidate/pages/claim-5-section-6-generality/page.md"], "boundary": "Eight named objectives and four official checkpoints; InfoNCE and SimCLR are one implementation by construction."},
+    {"id": "C6", "status": "verified_scoped", "paper_object": "Figure 5", "evidence": ["repro/released.py", "repro/orbits.py", "hf/candidate/raw/claim6_orbit_compression.json", "hf/candidate/pages/claim-6-orbit-compression/page.md"], "boundary": "Released arrays give 21.85x with an untrained-head control; independent training is 0-epoch corroboration."}
+  ],
+  "official_rejudge": {"status": "historical_recorded", "space": "DineshAI/y4uR1LFClc", "revision": "099048293db504eb467f72c37f7bfd371dadcfcb", "score": "5/12", "current_score_not_claimed": true},
+  "publication_policy": "Do not present this scoped candidate audit as a full independent rerun of every original training budget."
+}

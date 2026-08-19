@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "repository": "MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse",
+  "overall_verdict": "SCOPED_CLAIMS_1_TO_6_VERIFIED_WITH_EXPLICIT_BUDGET_AND_ASSUMPTION_BOUNDARIES",
+  "publication_boundary": "NO_FULL_BUDGET_INDEPENDENT_TRAINING_RELEASED_ARRAY_AND_CHECKPOINT_DEPENDENCIES",
+  "publication_allowed": false,
+  "score_claim": false,
+  "official_author_endorsement": false,
+  "historical_score": {"space": "DineshAI/y4uR1LFClc", "revision": "099048293db504eb467f72c37f7bfd371dadcfcb", "score": "5/12", "current_score_not_claimed": true},
+  "verdicts": {
+    "1": {"verdict": "verified_scoped", "evidence": ["repro/hessian.py", "repro/collapse.py", "hf/candidate/pages/claim-1-theorem-4-1/page.md"]},
+    "2": {"verdict": "verified_scoped", "evidence": ["repro/geometry.py", "hf/candidate/pages/claim-2-theorem-3-1/page.md"]},
+    "3": {"verdict": "verified_scoped", "evidence": ["repro/geometry.py", "repro/pretrained.py", "hf/candidate/pages/claim-3-proposition-3-3/page.md"]},
+    "4": {"verdict": "verified_scoped", "evidence": ["repro/released.py", "repro/collapse.py", "hf/candidate/pages/claim-4-figure-3/page.md"]},
+    "5": {"verdict": "verified_scoped", "evidence": ["repro/losses.py", "repro/pretrained.py", "repro/geometry.py", "hf/candidate/pages/claim-5-section-6-generality/page.md"]},
+    "6": {"verdict": "verified_scoped", "evidence": ["repro/released.py", "repro/orbits.py", "hf/candidate/pages/claim-6-orbit-compression/page.md"]}
+  }
+}

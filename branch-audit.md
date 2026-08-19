@@ -53,7 +53,8 @@ There are no exp/ branches and no duplicate master branch after the migration.
    because a later node exists. The limitations page records shortened runs,
    platform changes, and excluded numerical cases.
 5. All reachable commits use the approved MachineLearning-Nerd author and committer
-   identity. Branch tips and live GitHub refs are verified after publication.
+   identity `MachineLearning-Nerd <MachineLearning-Nerd@users.noreply.github.com>`.
+   Branch tips and live GitHub refs are verified after publication.
 
 ## Claim routing
 

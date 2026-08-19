@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+title: "The Geometry of Projection Heads: Conditioning, Invariance, and Collapse — scoped reproduction audit"
+message: "If you use this audit or its derived evidence, please cite the original paper and the repository."
+type: dataset
+authors:
+  - family-names: Chaudhry
+    given-names: Faris
+repository-code: "https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse"
+url: "https://github.com/MachineLearning-Nerd/icml26-geometry-projection-heads-conditioning-invariance-collapse"
+date-released: 2026-08-19
+preferred-citation:
+  type: article
+  title: "The Geometry of Projection Heads: Conditioning, Invariance, and Collapse"
+  authors:
+    - family-names: Chaudhry
+      given-names: Faris
+  year: 2026
+  journal: "arXiv preprint arXiv:2605.17180"
+  url: "https://arxiv.org/abs/2605.17180"
