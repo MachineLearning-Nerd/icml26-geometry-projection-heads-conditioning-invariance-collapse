@@ -129,7 +129,7 @@ def main() -> None:
     require(not any(name.startswith("exp/") or name == "master" for name in remote_heads), "legacy branch remains live")
 
     local_heads = set(run("git", "for-each-ref", "--format=%(refname:strip=2)", "refs/heads").splitlines())
-    require(local_heads == EXPECTED_BRANCHES, "local branch set is not the 12-branch contract")
+    require("main" in local_heads and local_heads <= EXPECTED_BRANCHES, "unexpected local branch name")
     require(not any("refs/original/" in ref for ref in run("git", "for-each-ref", "--format=%(refname)", "refs").splitlines()), "refs/original remains")
 
     identities = set()

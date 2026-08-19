@@ -16,10 +16,25 @@
   "claim_statuses": {"C1": "verified_scoped", "C2": "verified_scoped", "C3": "verified_scoped", "C4": "verified_scoped", "C5": "verified_scoped", "C6": "verified_scoped"},
   "historical_judge_record": {"space": "DineshAI/y4uR1LFClc", "revision": "099048293db504eb467f72c37f7bfd371dadcfcb", "score": "5/12", "current_score_not_claimed": true},
   "attribution": {"name": "MachineLearning-Nerd", "email": "MachineLearning-Nerd@users.noreply.github.com"},
-  "verified_reachable_commits": 29,
-  "recovery_bundle_sha256": null,
-  "last_known_git_commit": "d3ab395ea4cea9e8fbe1f68f4d4aaf3aeec8d5f0",
+  "verified_reachable_commits": 31,
+  "recovery_bundle_sha256": "4a6ce5462fc0032e25d57c38bbbd2510983d44cba32b13e43575a185d8ca91a3",
+  "last_known_git_commit": "0da88758bd9a34f05d91801b6d923fd776e04332",
   "documentation": {"readme": "complete", "status": "complete", "claim_evidence": "complete", "source_audit": "complete", "environment": "complete", "report": "complete", "branch_audit": "complete", "citation": "complete", "author_thank_you": "complete", "aggregate_manifest": "complete", "reproduction_verdicts": "complete", "final_verifier": "complete"},
-  "published_dossier": null,
-  "live_verification": null
+  "published_dossier": {
+    "documentation_checkpoint": "0da88758bd9a34f05d91801b6d923fd776e04332",
+    "verified_reachable_commits_after_final_checkpoint": 31,
+    "files": ["README.md", "STATUS.md", "CLAIM_EVIDENCE.md", "SOURCE_AUDIT.md", "ENVIRONMENT.md", "REPORT.md", "branch-audit.md", "claims.json", "reproduction_verdicts.json", "EVIDENCE_MANIFEST.json", "CITATION.cff", "AUTHOR_THANK_YOU.md", "AUTONOMOUS_STATE.json", "verify_final.py"],
+    "local_verification": "FINAL_AUDIT=VERIFIED branches=12 commits=31 claims=C1:verified_scoped,C2:verified_scoped,C3:verified_scoped,C4:verified_scoped,C5:verified_scoped,C6:verified_scoped historical_score=5/12 publication_allowed=false",
+    "fresh_clone_verification": "passed",
+    "verified_at_utc": "2026-08-19T11:23:46Z"
+  },
+  "live_verification": {
+    "default_branch": "main",
+    "branch_count": 12,
+    "reachable_commit_identity": "MachineLearning-Nerd <MachineLearning-Nerd@users.noreply.github.com>",
+    "legacy_exp_branches": false,
+    "legacy_master_branch": false,
+    "main_checkpoint": "0da88758bd9a34f05d91801b6d923fd776e04332",
+    "verified_at_utc": "2026-08-19T11:23:46Z"
+  }
 }
